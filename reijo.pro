@@ -51,7 +51,8 @@ HEADERS += \
 
 OTHER_FILES += \
     qml/testscene.qml \
-    todo.txt
+    todo.txt \
+    qml/Room.qml
 
 FORMS += \
     hdrviewer.ui

@@ -14,7 +14,6 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += main.cpp \
     objecteditorwidget.cpp \
-    testobject.cpp \
     scene.cpp \
     camera.cpp \
     shapefactory.cpp \
@@ -34,7 +33,6 @@ SOURCES += main.cpp \
 HEADERS += \
     proputils.h \
     objecteditorwidget.h \
-    testobject.h \
     scene.h \
     camera.h \
     shapefactory.h \

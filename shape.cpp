@@ -50,6 +50,8 @@ void Shape::componentComplete()
     m_transformation.rotate(m_rotation.y(), 0.0, 1.0, 0.0);
     m_transformation.rotate(m_rotation.z(), 0.0, 0.0, 1.0);
     m_transformation.scale(m_scale);
+
+    emit positionChanged();
 }
 
 void Shape::classBegin()

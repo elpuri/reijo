@@ -53,6 +53,7 @@ public:
 
 private:
     void calcTransformation();
+    QVector3D targetObjectPosition(QObject*) const;
 
 private slots:
     void onTargetObjectPositionChanged();

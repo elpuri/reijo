@@ -55,40 +55,44 @@ QVariant Camera::lookAt()
     return m_lookAt;
 }
 
+QVector3D Camera::targetObjectPosition(QObject *o) const
+{
+    QVector3D targetPosition;
+    const QMetaObject* mo = o->metaObject();
+    int propCount = mo->propertyCount();
+    bool found = false;
+    for (int i=0; i < propCount; i++) {
+        QMetaProperty mp = mo->property(i);
+        if (QString(mp.name()).compare("position") == 0) {
+            found = true;
+            QVariant positionVariant = mp.read(o);
+            if (positionVariant.type() != QMetaType::QVector3D)
+                qDebug() << "Position property of lookAt object isn't of type QVector3D";
+            else
+                targetPosition = positionVariant.value<QVector3D>();
+            if (mp.hasNotifySignal()) {
+                // Isn't there a way to generate a signature that connect accepts?
+                connect(m_targetObject, "2" + mp.notifySignal().methodSignature(), this, SLOT(onTargetObjectPositionChanged()));
+            }
+            break;
+        }
+    }
+    if (!found)
+        qDebug() << "Object assigned to lookAt doesn't have a position property";
+    return targetPosition;
+}
+
 void Camera::lookAtSetter(QVariant target)
 {
     // If target is a QVector3D, use it as is
     // If target is a QObject*, look for the "position" property and connect to listen to changes if possible
     m_lookAt = target;
-    qDebug() << "Look at target type" << target.typeName();
     if (target.type() == QMetaType::QVector3D) {
         disconnect(this, SLOT(onTargetObjectPositionChanged()));   // in case lookAt was previously a QObject*
         m_target = target.value<QVector3D>();
-        qDebug() << "look at vec:" << m_target;
     } else if (target.type() == QMetaType::QObjectStar) {
-        qDebug() << "Camera: lookat target is a QObject*";
         m_targetObject = target.value<QObject*>();
-
-        const QMetaObject* mo = m_targetObject->metaObject();
-        int propCount = mo->propertyCount();
-        bool found = false;
-        for (int i=0; i < propCount; i++) {
-            QMetaProperty mp = mo->property(i);
-            qDebug() << mp.name();
-            if (QString(mp.name()).compare("position") == 0) {
-                found = true;
-                QVariant positionVariant = mp.read(m_targetObject);
-                if (positionVariant.type() != QMetaType::QVector3D)
-                    qDebug() << "Position property of lookAt object isn't of type QVector3D";
-                else
-                    m_target = positionVariant.value<QVector3D>();
-    //            if (mp.hasNotifySignal())
-     //               connect(m_targetObject, mo->mmp.notifySignalIndex(), this, SLOT(onTargetObjectPositionChanged()));
-                break;
-            }
-        }
-        if (!found)
-            qDebug() << "Object assigned to lookAt doesn't have a position property";
+        m_target = targetObjectPosition(m_targetObject);
 
     } else
         qDebug() << "Why did you try to assign" << target.typeName() << "to lookAt?";
@@ -113,7 +117,8 @@ void Camera::generateRay(Ray &r, float x, float y, float aspectRatio)
 
 void Camera::onTargetObjectPositionChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+    m_target = targetObjectPosition(m_targetObject);
+    calcTransformation();
 }
 
 void Camera::calcTransformation()

@@ -42,6 +42,8 @@ public:
     bool intersect(const Ray &ray, double &t);
     QVector4D surfaceNormal(const QVector4D &p);
 
+    QString dumpProperties();
+
 private:
     void calcD();
 

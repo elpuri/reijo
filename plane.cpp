@@ -34,6 +34,13 @@ Plane::Plane(QObject *parent) :
 }
 
 
+QString Plane::dumpProperties()
+{
+    QString props = "[point: %1, %2, %3  normal: %4, %5, %6]";
+    props = props.arg(m_point.x()).arg(m_point.y()).arg(m_point.z()).arg(m_normal.x()).arg(m_normal.y()).arg(m_normal.z());
+    return props;
+}
+
 QVector4D Plane::surfaceNormal(const QVector4D &p)
 {
     return QVector4D(m_normal, 0.0);

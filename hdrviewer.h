@@ -41,6 +41,7 @@ class HdrViewer : public QObject,
     Q_OBJECT
 
     SIMPLE_PROPERTY_DECL(Renderer*, renderer)
+    SIMPLE_PROPERTY(float, gamma)
 
 public:
     explicit HdrViewer(QObject *parent = 0);

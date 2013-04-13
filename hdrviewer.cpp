@@ -27,7 +27,8 @@
 #include "renderer.h"
 
 HdrViewer::HdrViewer(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_gamma(2.2f)
 {
 
 }
@@ -76,9 +77,9 @@ void HdrViewer::onFrameComplete()
     QImage target(w, h, QImage::Format_ARGB32);
     int* bits = (int*) target.bits();
     for (int i=0; i < w * h; i++) {
-        int r = qMin(*raw * 255, 255.0f); raw++;
-        int g = qMin(*raw * 255, 255.0f); raw++;
-        int b = qMin(*raw * 255, 255.0f); raw++;
+        int r = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
+        int g = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
+        int b = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
         *bits = qRgba(r, g, b, 255.0f); bits++;
     }
 

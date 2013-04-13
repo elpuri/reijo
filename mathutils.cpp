@@ -25,6 +25,7 @@
 
 #include "mathutils.h"
 #include <math.h>
+#include <stdlib.h>
 
 MathUtils::MathUtils()
 {
@@ -53,4 +54,9 @@ QVector4D MathUtils::reflect(const QVector4D &incident, const QVector4D normal)
 QVector4D MathUtils::refract(const QVector4D &incident, const float n1, const float n2)
 {
 
+}
+
+float MathUtils::randomf()
+{
+    return (float) random() / (float) RAND_MAX;
 }

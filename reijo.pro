@@ -9,8 +9,7 @@ QT       += core qml widgets gui
 TARGET = reijo
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x
-
+QMAKE_CXXFLAGS += -std=c++0x -O3
 
 SOURCES += main.cpp \
     objecteditorwidget.cpp \

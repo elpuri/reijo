@@ -30,7 +30,7 @@
 
 
 ShapeFactory::ShapeFactory(QObject *parent) :
-    SceneNode(parent),
+    Shape(parent),
     m_selectorExpression(nullptr)
 {
 }
@@ -92,6 +92,7 @@ void ShapeFactory::componentComplete()
             }
         }
     }
+    Shape::componentComplete();
 }
 
 ShapeFactoryAttachedProperties* ShapeFactory::qmlAttachedProperties(QObject *factory)

@@ -32,6 +32,7 @@
 #include <QtQml>
 #include "proputils.h"
 #include "scenenode.h"
+#include "shape.h"
 
 class ShapeFactoryAttachedProperties : public QObject {
     Q_OBJECT
@@ -40,7 +41,7 @@ class ShapeFactoryAttachedProperties : public QObject {
 
 };
 
-class ShapeFactory : public SceneNode, public QQmlParserStatus
+class ShapeFactory : public Shape
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -50,7 +51,8 @@ class ShapeFactory : public SceneNode, public QQmlParserStatus
 
 public:
     explicit ShapeFactory(QObject *parent = 0);
-    
+    virtual bool intersect(const Ray& ray, double& t) { return false; }
+    virtual QVector4D surfaceNormal(const QVector4D& p) { return QVector4D(); }
     static ShapeFactoryAttachedProperties* qmlAttachedProperties(QObject* factory);
 
 signals:

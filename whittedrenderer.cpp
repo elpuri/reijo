@@ -34,7 +34,6 @@
 #include "light.h"
 #include "material.h"
 #include "mathutils.h"
-#include "whittedrunnable.h"
 
 WhittedRenderer::WhittedRenderer(QObject *parent) :
     Renderer(parent),

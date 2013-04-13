@@ -32,10 +32,12 @@
 #include <QtQml>
 #include <QString>
 #include <QVector3D>
+#include <QRunnable>
 
 class Ray;
 class Shape;
 class Light;
+class Camera;
 
 class WhittedRenderer : public Renderer,
                         public QQmlParserStatus
@@ -48,8 +50,6 @@ class WhittedRenderer : public Renderer,
 
 public:
     explicit WhittedRenderer(QObject *parent = 0);
-    QVector3D trace(const Ray& r, int depth, const QList<Shape*>& shapes, const QList<Light*>& lights,
-                    const QVector4D& cameraPosition);
 
 public:
     void render(Scene* scene);
@@ -59,10 +59,33 @@ protected:
     void classBegin();
     void componentComplete();
 
+private:
+    QVector3D trace(const Ray& r, int depth, const QList<Shape*>& shapes, const QList<Light*>& lights);
+    void renderScanline(int y);
 
 
 private:
     float* m_buffer;
+    int m_hwThreadCount;
+
+    // Common state for rendering threads
+    Camera* m_activeCamera;
+    QList<Shape*> m_shapes;
+    QList<Light*> m_lights;
+
+    friend class WhittedRunnable;
+
+    class WhittedRunnable : public QRunnable {
+
+    public:
+        explicit WhittedRunnable(WhittedRenderer* r, int interleave, int interleaveCount);
+        void run();
+
+        WhittedRenderer* m_renderer;
+        int m_interleave;
+        int m_interleaveCount;
+    };
+
 };
 
 #endif // WHITTEDRENDERER_H

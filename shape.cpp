@@ -30,7 +30,8 @@ Shape::Shape(QObject* parent) :
     SceneNode(parent),
     m_scale(1.0, 1.0, 1.0),
     m_position(0.0, 0.0, 0.0),
-    m_castsShadows(true)
+    m_castsShadows(true),
+    m_visible(true)
 {
 }
 

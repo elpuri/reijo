@@ -85,7 +85,8 @@ Renderer* Scene::activeRenderer()
 QList<Shape*> Scene::gatherShapes()
 {
     QList<Shape*> shapes;
-    gatherNodeOfType<Shape>(shapes, this);
+    gatherNodes<Shape>(shapes, this, [](Shape* s) { return s->visible(); });
+
     return shapes;
 }
 

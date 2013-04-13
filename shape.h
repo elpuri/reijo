@@ -46,6 +46,7 @@ class Shape : public SceneNode,
     SIMPLE_NOTIFYING_PROPERTY(QVector3D, scale)
     SIMPLE_PROPERTY(Material*, material)
     SIMPLE_NOTIFYING_PROPERTY(bool, castsShadows)
+    SIMPLE_NOTIFYING_PROPERTY(bool, visible)
 
 public:
     explicit Shape(QObject* parent = 0);

@@ -29,7 +29,7 @@
 #include <QObject>
 #include <QQmlListProperty>
 #include <QVector3D>
-
+#include <functional>
 #include "proputils.h"
 #include <QDebug>
 
@@ -67,6 +67,13 @@ public:
         return nullptr;
     }
 
+    template<typename T> static void gatherNodes(QList<T*>& nodes, SceneNode* node, std::function<bool (T*)> accepted) {
+        T* t = qobject_cast<T*>(node);
+        if (t && accepted(t))
+            nodes.append(t);
+        foreach (SceneNode* child, node->childNodes())
+            gatherNodes<T>(nodes, child, accepted);
+    }
 
     template<typename T> static void gatherNodeOfType(QList<T*>& nodes, SceneNode* node) {
         T* t = qobject_cast<T*>(node);

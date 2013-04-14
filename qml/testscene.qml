@@ -7,14 +7,14 @@ Scene {
 
     property bool mini : false
 
-
-
     WhittedRenderer {
         id: whitted
         renderedWidth: mini ? 20 : 640
-        renderedHeight: mini ? 20 : 480
+        renderedHeight: mini ? 20 : 360
         maxRecursionDepth: 5
         ambientLightColor: Qt.vector3d(1.0, 1.0, 1.0)
+        antiAliasing: WhittedRenderer.JitteredSamples
+        samplesPerPixel: 8
     }
 
     HdrViewer {

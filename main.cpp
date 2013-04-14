@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    scene->dumpNodes();
+//    scene->dumpNodes();
     scene->render();
 
     return a.exec();

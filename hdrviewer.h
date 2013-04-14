@@ -31,6 +31,7 @@
 #include <QtQml>
 
 #include "proputils.h"
+#include "hdrviewersettings.h"
 
 class Renderer;
 
@@ -42,6 +43,7 @@ class HdrViewer : public QObject,
 
     SIMPLE_PROPERTY_DECL(Renderer*, renderer)
     SIMPLE_PROPERTY(float, gamma)
+    SIMPLE_PROPERTY(float, exposure)
 
 public:
     explicit HdrViewer(QObject *parent = 0);
@@ -54,12 +56,13 @@ public slots:
 
     void onFrameComplete();
     void onProgressiveUpdate();
-
-private:
+    void render();
 
 private:
     Renderer* m_renderer;
     QLabel m_viewWidget;
+    float* m_buffer;
+    HdrViewerSettings* m_settingsUi;
 };
 
 #endif // HDRVIEWER_H

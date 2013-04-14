@@ -25,12 +25,17 @@
 
 #include "hdrviewer.h"
 #include "renderer.h"
+#include <QDebug>
 
 HdrViewer::HdrViewer(QObject *parent) :
     QObject(parent),
-    m_gamma(2.2f)
+    m_gamma(2.2f),
+    m_exposure(1.0),
+    m_buffer(nullptr)
 {
-
+    m_settingsUi = new HdrViewerSettings();
+    connect(m_settingsUi, &HdrViewerSettings::gammaChanged, this, &HdrViewer::render);
+    connect(m_settingsUi, &HdrViewerSettings::exposureChanged, this, &HdrViewer::render);
 }
 
 Renderer* HdrViewer::renderer()
@@ -51,39 +56,57 @@ void HdrViewer::rendererSetter(Renderer* renderer)
 
 void HdrViewer::classBegin()
 {
-
 }
 
 void HdrViewer::componentComplete()
 {
-
+    m_settingsUi->setGamma(m_gamma);
+    m_settingsUi->setExposure(m_exposure);
 }
 
 void HdrViewer::onProgressiveUpdate()
 {
-
 }
 
 void HdrViewer::onFrameComplete()
 {
-    float *buffer;
     int w = m_renderer->renderedWidth();
     int h = m_renderer->renderedHeight();
-    qDebug() << Q_FUNC_INFO << w << h;
 
-    m_renderer->copyRenderBuffer(buffer);
-    float *raw = buffer;
+    m_renderer->copyRenderBuffer(m_buffer);
+    render();
+
+    m_viewWidget.setWindowTitle("Reijo HDR viewer");
+    m_viewWidget.resize(w, h);
+    m_viewWidget.move(300, 200);
+    m_viewWidget.show();
+
+    qDebug() << m_viewWidget.x() << m_viewWidget.y() << m_viewWidget.height();
+
+    m_settingsUi->move(m_viewWidget.x(), m_viewWidget.y() + m_viewWidget.height() + 50);
+    m_settingsUi->show();
+}
+
+void HdrViewer::render()
+{
+    if (!m_buffer)
+        return;
+
+    int w = m_renderer->renderedWidth();
+    int h = m_renderer->renderedHeight();
+
+    float gamma = m_settingsUi->gamma();
+    float exposure = m_settingsUi->exposure();
+    float *raw = m_buffer;
 
     QImage target(w, h, QImage::Format_ARGB32);
     int* bits = (int*) target.bits();
     for (int i=0; i < w * h; i++) {
-        int r = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
-        int g = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
-        int b = qMin((float)pow(*raw, 1.0f / m_gamma) * 255.0f, 255.0f); raw++;
+        int r = qMin((float)pow(*raw * exposure, 1.0f / gamma) * 255.0f, 255.0f); raw++;
+        int g = qMin((float)pow(*raw * exposure, 1.0f / gamma) * 255.0f, 255.0f); raw++;
+        int b = qMin((float)pow(*raw * exposure, 1.0f / gamma) * 255.0f, 255.0f); raw++;
         *bits = qRgba(r, g, b, 255.0f); bits++;
     }
 
-    m_viewWidget.resize(w, h);
     m_viewWidget.setPixmap(QPixmap::fromImage(target));
-    m_viewWidget.show();
 }

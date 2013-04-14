@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     hdrviewer.cpp \
     mathutils.cpp \
     material.cpp \
-    plane.cpp
+    plane.cpp \
+    hdrviewersettings.cpp
 
 HEADERS += \
     proputils.h \
@@ -46,12 +47,14 @@ HEADERS += \
     hdrviewer.h \
     mathutils.h \
     material.h \
-    plane.h
+    plane.h \
+    hdrviewersettings.h
 
 OTHER_FILES += \
     qml/testscene.qml \
     todo.txt \
-    qml/Room.qml
+    qml/Room.qml \
+    .gitignore
 
 FORMS += \
-    hdrviewer.ui
+    hdrviewersettings.ui

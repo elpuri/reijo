@@ -40,7 +40,8 @@ WhittedRenderer::WhittedRenderer(QObject *parent) :
     m_buffer(nullptr),
     m_maxRecursionDepth(5),
     m_coloredShadows(false),
-    m_samplesPerPixel(4)
+    m_samplesPerPixel(4),
+    m_antiAliasing(None)
 {
     m_hwThreadCount = std::thread::hardware_concurrency();
     if (m_hwThreadCount == 0)

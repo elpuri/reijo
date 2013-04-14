@@ -39,7 +39,8 @@ WhittedRenderer::WhittedRenderer(QObject *parent) :
     Renderer(parent),
     m_buffer(nullptr),
     m_maxRecursionDepth(5),
-    m_coloredShadows(false)
+    m_coloredShadows(false),
+    m_samplesPerPixel(4)
 {
     m_hwThreadCount = std::thread::hardware_concurrency();
     if (m_hwThreadCount == 0)
@@ -92,11 +93,30 @@ void WhittedRenderer::renderScanline(int y)
     float* buffer = m_buffer + y * m_renderedWidth * 3;
     float aspect = (float) m_renderedWidth / m_renderedHeight;
 
-    for (int x=0; x < m_renderedWidth; x++) {
-        Ray primaryRay;
-        m_activeCamera->generateRay(primaryRay, (float)(x + 1) / m_renderedWidth, (float)(y + 1) / m_renderedHeight, aspect);
-        QVector3D shaded = trace(primaryRay, 0, m_shapes, m_lights);
-        *buffer++ = shaded.x(); *buffer++ = shaded.y(); *buffer++ = shaded.z();
+    float xStep = 1.0 / (m_renderedWidth - 1);
+    float yStep = 1.0 / (m_renderedHeight - 1);
+
+    if (m_antiAliasing == None) {
+        for (int x=0; x < m_renderedWidth; x++) {
+            QVector3D shaded;
+            Ray primaryRay;
+            m_activeCamera->generateRay(primaryRay, x * xStep, y * yStep, aspect);
+            shaded = trace(primaryRay, 0, m_shapes, m_lights);
+            *buffer++ = shaded.x(); *buffer++ = shaded.y(); *buffer++ = shaded.z();
+        }
+    } else if (m_antiAliasing == JitteredSamples) {
+        float sampleScaler = 1.0 / m_samplesPerPixel;
+        for (int x=0; x < m_renderedWidth; x++) {
+            QVector3D shaded;
+            for (int i=0; i < m_samplesPerPixel; i++) {
+                Ray primaryRay;
+                float xSample = x * xStep + MathUtils::randomf() * xStep;
+                float ySample = y * yStep + MathUtils::randomf() * yStep;
+                m_activeCamera->generateRay(primaryRay, xSample, ySample, aspect);
+                shaded += trace(primaryRay, 0, m_shapes, m_lights) * sampleScaler;
+            }
+            *buffer++ = shaded.x(); *buffer++ = shaded.y(); *buffer++ = shaded.z();
+        }
     }
 }
 

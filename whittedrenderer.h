@@ -44,12 +44,18 @@ class WhittedRenderer : public Renderer,
 {
     Q_OBJECT
 
+public:
+    enum AntiAliasingMode { None, JitteredSamples };
+    Q_ENUMS(AntiAliasingMode)
+
     SIMPLE_PROPERTY(QVector3D, ambientLightColor)
     SIMPLE_PROPERTY(int, maxRecursionDepth)
     SIMPLE_PROPERTY(bool, coloredShadows)
+    SIMPLE_PROPERTY(AntiAliasingMode, antiAliasing)
+    SIMPLE_PROPERTY(int, samplesPerPixel)
 
-public:
     explicit WhittedRenderer(QObject *parent = 0);
+
 
 public:
     void render(Scene* scene);

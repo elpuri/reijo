@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <QDebug>
+#include <QApplication>
 
 HdrViewerSettings::HdrViewerSettings(QWidget *parent) :
     QWidget(parent),
@@ -14,6 +15,9 @@ HdrViewerSettings::HdrViewerSettings(QWidget *parent) :
     connect(ui->gammaSlider, &QSlider::valueChanged, this, &HdrViewerSettings::gammaChanged);
     connect(ui->exposureSlider, &QSlider::valueChanged, this, &HdrViewerSettings::onExposureSliderChanged);
     connect(ui->exposureSlider, &QSlider::valueChanged, this, &HdrViewerSettings::exposureChanged);
+//    connect(ui->buttonQuit, &QPushButton::clicked, QApplication::instance(), &QCoreApplication::quit);
+    connect(ui->buttonQuit, SIGNAL(clicked()), QApplication::instance(), SLOT(quit())); // why?
+    connect(ui->buttonSave, &QPushButton::clicked, this, &HdrViewerSettings::save);
 }
 
 HdrViewerSettings::~HdrViewerSettings()

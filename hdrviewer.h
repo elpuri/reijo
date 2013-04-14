@@ -47,6 +47,7 @@ class HdrViewer : public QObject,
 
 public:
     explicit HdrViewer(QObject *parent = 0);
+    ~HdrViewer();
     
 protected:
     void classBegin();
@@ -56,6 +57,7 @@ public slots:
 
     void onFrameComplete();
     void onProgressiveUpdate();
+    void onSave();
     void render();
 
 private:
@@ -63,6 +65,7 @@ private:
     QLabel m_viewWidget;
     float* m_buffer;
     HdrViewerSettings* m_settingsUi;
+    QImage* m_renderedImage;
 };
 
 #endif // HDRVIEWER_H

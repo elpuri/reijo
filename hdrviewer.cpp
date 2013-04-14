@@ -25,17 +25,26 @@
 
 #include "hdrviewer.h"
 #include "renderer.h"
+
+#include <QFileDialog>
 #include <QDebug>
 
 HdrViewer::HdrViewer(QObject *parent) :
     QObject(parent),
     m_gamma(2.2f),
     m_exposure(1.0),
-    m_buffer(nullptr)
+    m_buffer(nullptr),
+    m_renderedImage(nullptr)
 {
     m_settingsUi = new HdrViewerSettings();
     connect(m_settingsUi, &HdrViewerSettings::gammaChanged, this, &HdrViewer::render);
     connect(m_settingsUi, &HdrViewerSettings::exposureChanged, this, &HdrViewer::render);
+    connect(m_settingsUi, &HdrViewerSettings::save, this, &HdrViewer::onSave);
+}
+
+HdrViewer::~HdrViewer()
+{
+    delete m_renderedImage;
 }
 
 Renderer* HdrViewer::renderer()
@@ -70,9 +79,17 @@ void HdrViewer::onProgressiveUpdate()
 
 void HdrViewer::onFrameComplete()
 {
+    if (!m_renderer) {
+        qCritical() << "HdrViewer has no renderer as source";
+        return;
+    }
+
     int w = m_renderer->renderedWidth();
     int h = m_renderer->renderedHeight();
 
+    if (m_renderedImage)
+        delete m_renderedImage;
+    m_renderedImage = new QImage(w, h, QImage::Format_ARGB32);
     m_renderer->copyRenderBuffer(m_buffer);
     render();
 
@@ -80,8 +97,6 @@ void HdrViewer::onFrameComplete()
     m_viewWidget.resize(w, h);
     m_viewWidget.move(300, 200);
     m_viewWidget.show();
-
-    qDebug() << m_viewWidget.x() << m_viewWidget.y() << m_viewWidget.height();
 
     m_settingsUi->move(m_viewWidget.x(), m_viewWidget.y() + m_viewWidget.height() + 50);
     m_settingsUi->show();
@@ -99,8 +114,7 @@ void HdrViewer::render()
     float exposure = m_settingsUi->exposure();
     float *raw = m_buffer;
 
-    QImage target(w, h, QImage::Format_ARGB32);
-    int* bits = (int*) target.bits();
+    int* bits = (int*) m_renderedImage->bits();
     for (int i=0; i < w * h; i++) {
         int r = qMin((float)pow(*raw * exposure, 1.0f / gamma) * 255.0f, 255.0f); raw++;
         int g = qMin((float)pow(*raw * exposure, 1.0f / gamma) * 255.0f, 255.0f); raw++;
@@ -108,5 +122,18 @@ void HdrViewer::render()
         *bits = qRgba(r, g, b, 255.0f); bits++;
     }
 
-    m_viewWidget.setPixmap(QPixmap::fromImage(target));
+    m_viewWidget.setPixmap(QPixmap::fromImage(*m_renderedImage));
+}
+
+void HdrViewer::onSave()
+{
+    if (!m_renderedImage)
+        return;
+
+    QString filename = QFileDialog::getSaveFileName(&m_viewWidget, "Save as");
+    if (filename.isEmpty())
+        return;
+
+    qDebug() << "Saving to" << filename;
+    m_renderedImage->save(filename);
 }

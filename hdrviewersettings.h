@@ -27,6 +27,7 @@ public:
 signals:
     void gammaChanged(float gamma);
     void exposureChanged(float exposure);
+    void save();
 
 private:
     int gammaToSliderValue(float gamma);

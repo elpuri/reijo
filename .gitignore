@@ -1,5 +1,6 @@
 todo.txt
-*.pro.user
+*.pro.user*
 callgrind*
 *.png
 *.jpg
+*.mp4

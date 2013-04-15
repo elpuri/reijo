@@ -4,12 +4,15 @@
 #
 #-------------------------------------------------
 
+
 QT       += core qml widgets gui
 
 TARGET = reijo
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x -O3
+LIBS += -L /usr/local/lib -lavcodec -lavformat -lswscale
+
 
 SOURCES += main.cpp \
     objecteditorwidget.cpp \
@@ -28,7 +31,8 @@ SOURCES += main.cpp \
     mathutils.cpp \
     material.cpp \
     plane.cpp \
-    hdrviewersettings.cpp
+    hdrviewersettings.cpp \
+    videoencoder.cpp
 
 HEADERS += \
     proputils.h \
@@ -48,13 +52,16 @@ HEADERS += \
     mathutils.h \
     material.h \
     plane.h \
-    hdrviewersettings.h
+    hdrviewersettings.h \
+    videoencoder.h
 
 OTHER_FILES += \
     qml/testscene.qml \
     todo.txt \
     qml/Room.qml \
-    .gitignore
+    .gitignore \
+    qml/animscene.qml \
+    README.md
 
 FORMS += \
     hdrviewersettings.ui

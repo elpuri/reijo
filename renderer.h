@@ -49,6 +49,8 @@ public:
 
 signals:
     void progressiveUpdate();
+    void renderingStarted();
+    void renderingComplete();
     void frameComplete();
 
 

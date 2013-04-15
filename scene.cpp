@@ -34,7 +34,8 @@
 Scene::Scene(QObject *parent) :
     SceneNode(parent),
     m_renderer(nullptr),
-    m_camera(nullptr)
+    m_camera(nullptr),
+    m_time(0.0)
 {
 }
 
@@ -45,8 +46,8 @@ void Scene::dumpNodes()
 
 void Scene::render()
 {
+    m_time = 0.0;
     buildTransformationMatrices();
-
     Renderer* r = activeRenderer();
     if (r) {
         Camera* c = activeCamera();
@@ -118,4 +119,20 @@ void Scene::calculateCompositeMatrix(const QMatrix4x4 parentMatrix, Shape *shape
         if (s)
             calculateCompositeMatrix(shape->compositeTransformation(), s);
     }
+}
+
+qreal Scene::time()
+{
+    return m_time;
+}
+
+bool Scene::advanceFrame()
+{
+    m_time += m_frameTime;
+    if (m_time < m_duration) {
+        emit timeChanged();
+        buildTransformationMatrices();
+        return true;
+    }
+    return false;
 }

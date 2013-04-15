@@ -45,12 +45,6 @@ QString Shape::dumpProperties()
 
 void Shape::componentComplete()
 {
-    m_transformation.setToIdentity();
-    m_transformation.translate(m_position);
-    m_transformation.rotate(m_rotation.x(), 1.0, 0.0, 0.0);
-    m_transformation.rotate(m_rotation.y(), 0.0, 1.0, 0.0);
-    m_transformation.rotate(m_rotation.z(), 0.0, 0.0, 1.0);
-    m_transformation.scale(m_scale);
 
     emit positionChanged();
 }
@@ -62,6 +56,13 @@ void Shape::classBegin()
 
 void Shape::applyParentMatrix(const QMatrix4x4 m)
 {
+    m_transformation.setToIdentity();
+    m_transformation.translate(m_position);
+    m_transformation.rotate(m_rotation.x(), 1.0, 0.0, 0.0);
+    m_transformation.rotate(m_rotation.y(), 0.0, 1.0, 0.0);
+    m_transformation.rotate(m_rotation.z(), 0.0, 0.0, 1.0);
+    m_transformation.scale(m_scale);
+
     m_objectToWorld = m * m_transformation;
     bool invertible;
     m_worldToObject = m_objectToWorld.inverted(&invertible);

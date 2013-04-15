@@ -44,6 +44,9 @@ class Scene : public SceneNode
 
     SIMPLE_PROPERTY(Camera*, camera)
     SIMPLE_PROPERTY(Renderer*, renderer)
+    SIMPLE_PROPERTY(qreal, duration)
+    SIMPLE_PROPERTY(qreal, frameTime)
+    Q_PROPERTY(qreal time READ time NOTIFY timeChanged)
 
 public:
     explicit Scene(QObject *parent = 0);
@@ -56,6 +59,12 @@ public:
     QList<Light*> gatherLights();
     Camera* activeCamera();
 
+    bool advanceFrame();
+    qreal time();
+
+signals:
+    void timeChanged();
+
 private:
     void buildTransformationMatrices();
     Renderer* activeRenderer();
@@ -64,6 +73,7 @@ private:
     static void addChildShapes(QList<Shape*>& shapes, SceneNode* node);
 
 private:
+    qreal m_time;
 };
 
 #endif // SCENE_H

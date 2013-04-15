@@ -39,6 +39,7 @@
 #include "material.h"
 #include "plane.h"
 #include "mathutils.h"
+#include "videoencoder.h"
 
 int main(int argc, char *argv[])
 {
@@ -56,9 +57,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<PointLight>("Reijo", 1, 0, "PointLight");
     qmlRegisterType<Material>("Reijo", 1, 0, "Material");
     qmlRegisterType<Plane>("Reijo", 1, 0, "Plane");
+    qmlRegisterType<VideoEncoder>("Reijo", 1, 0, "VideoEncoder");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/testscene.qml");
+    QQmlComponent qmlComponent(&engine, "qml/animscene.qml");
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;

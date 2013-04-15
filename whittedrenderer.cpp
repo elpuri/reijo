@@ -51,6 +51,8 @@ WhittedRenderer::WhittedRenderer(QObject *parent) :
 
 void WhittedRenderer::render(Scene* scene)
 {
+
+    // TODO: this stuff should go to the base class
     qDebug() << Q_FUNC_INFO;
 
     qDebug() << "Rendering with" << m_hwThreadCount << "threads";
@@ -68,25 +70,32 @@ void WhittedRenderer::render(Scene* scene)
         return;
     }
 
-    QElapsedTimer elapsed;
-    elapsed.start();
-
     if (m_buffer)
         delete m_buffer;
 
     m_buffer = new float[m_renderedWidth * m_renderedHeight * 3];
 
-    auto pool = QThreadPool::globalInstance();
-    for (int i=0; i < m_hwThreadCount; i++) {
-        WhittedRunnable* runnable = new WhittedRunnable(this, i, m_hwThreadCount);
-        runnable->setAutoDelete(true);
-        pool->start(runnable);
-    }
+    emit renderingStarted();
+    do {
+        QElapsedTimer elapsed;
+        elapsed.start();
 
-    pool->waitForDone();
+        qDebug() << "Starting new frame" << scene->time();
+        auto pool = QThreadPool::globalInstance();
+        for (int i=0; i < m_hwThreadCount; i++) {
+            WhittedRunnable* runnable = new WhittedRunnable(this, i, m_hwThreadCount);
+            runnable->setAutoDelete(true);
+            pool->start(runnable);
+        }
 
-    qDebug() << "Render complete in:" << elapsed.elapsed() << "ms";
-    emit frameComplete();
+        pool->waitForDone();
+
+        qDebug() << "Frame complete in:" << elapsed.elapsed() << "ms";
+        emit frameComplete();
+    } while(scene->advanceFrame());
+
+    emit renderingComplete();
+
 }
 
 void WhittedRenderer::renderScanline(int y)

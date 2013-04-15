@@ -2,28 +2,37 @@ import Reijo 1.0
 import QtQuick 2.0
 
 Scene {
+    id: scene
     camera: cam
     renderer: whitted
+    duration: 10.0
+    frameTime: 1 / 30.0     // 30fps
 
     property bool mini : false
+
+    VideoEncoder {
+        renderer: whitted
+        filename: "anim.mp4"
+        bitrate: 3000000
+    }
 
     WhittedRenderer {
         id: whitted
         renderedWidth: mini ? 20 : 640
-        renderedHeight: mini ? 20 : 360
+        renderedHeight: mini ? 20 : 430
         maxRecursionDepth: 5
         ambientLightColor: Qt.vector3d(1.0, 1.0, 1.0)
         antiAliasing: WhittedRenderer.JitteredSamples
-        samplesPerPixel: 8
+        samplesPerPixel: 7
     }
-
+/*
     HdrViewer {
         id: viewer
         renderer: whitted
         gamma: 2.2
         exposure: 0.6
     }
-
+*/
     Material {
         id: redMaterial
         color: "#ff2222"
@@ -46,7 +55,8 @@ Scene {
         ShapeFactory {
             id: clump
             position: Qt.vector3d(0.0, 3.5, 0.0)
-            model: 50
+            rotation: Qt.vector3d(0.0, scene.time * 360.0 / 10.0, 0.0)
+            model: 55
             componentSelectorScript: { Math.random() < 0.7 ? sphereComponent : mirrorSphereComponent; }
         }
 

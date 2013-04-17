@@ -35,7 +35,9 @@ Scene::Scene(QObject *parent) :
     SceneNode(parent),
     m_renderer(nullptr),
     m_camera(nullptr),
-    m_time(0.0)
+    m_time(0.0),
+    m_frameTime(0.0),
+    m_duration(0.0)
 {
 }
 
@@ -129,7 +131,7 @@ qreal Scene::time()
 bool Scene::advanceFrame()
 {
     m_time += m_frameTime;
-    if (m_time < m_duration) {
+    if (m_time <= m_duration && m_duration != 0.0 && m_frameTime != 0.0) {
         emit timeChanged();
         buildTransformationMatrices();
         return true;

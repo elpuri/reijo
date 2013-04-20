@@ -48,14 +48,15 @@ QVector4D Plane::surfaceNormal(const QVector4D &p, const Ray& ray)
 
 bool Plane::intersect(const Ray &ray, double &t)
 {
-    t = -(QVector4D::dotProduct(ray.origin().toVector3D(), m_normal) + m_d) /
-            QVector4D::dotProduct(ray.direction().toVector3D(), m_normal);
+    t = -(QVector4D::dotProduct(ray.origin(), m_n) + m_d) /
+            QVector4D::dotProduct(ray.direction(), m_n);
     return t > MathUtils::dEpsilon;
 }
 
 void Plane::normalSetter(QVector3D normal)
 {
-    m_normal = normal.normalized();
+    m_normal = normal;
+    m_n = QVector4D(normal.normalized(), 0.0);
     calcD();
 }
 

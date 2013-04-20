@@ -37,7 +37,27 @@ void PointLight::sample(QVector4D &position, QVector3D &emittance)
     position = m_position.toVector4D();
     position.setW(1.0f);
 
-    emittance = QVector3D(m_color.redF() * m_intensity,
-                          m_color.greenF() * m_intensity,
-                          m_color.blueF() * m_intensity);
+    emittance = m_emittance;
+}
+
+void PointLight::intensitySetter(double intensity)
+{
+    if (intensity != m_intensity) {
+        m_intensity = intensity;
+        emit intensityChanged();
+        m_emittance = QVector3D(m_color.redF() * m_intensity,
+                                m_color.greenF() * m_intensity,
+                                m_color.blueF() * m_intensity);
+    }
+}
+
+void PointLight::colorSetter(QColor color)
+{
+    if (color != m_color) {
+        m_color = color;
+        emit colorChanged();
+        m_emittance = QVector3D(m_color.redF() * m_intensity,
+                                m_color.greenF() * m_intensity,
+                                m_color.blueF() * m_intensity);
+    }
 }

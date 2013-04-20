@@ -52,6 +52,15 @@ public: \
 protected: \
     type m_##name;
 
+#define SIMPLE_NOTIFYING_PROPERTY_WDECL(type, name) \
+public: \
+    Q_PROPERTY(type name READ name WRITE name##Setter NOTIFY name##Changed) \
+    Q_SIGNAL void name##Changed(); \
+    type name() { return m_##name; } \
+    void name##Setter(type name);\
+protected: \
+    type m_##name;
+
 
 #define SIMPLE_NOTIFYING_PROPERTY_DECL(type, name) \
 public: \

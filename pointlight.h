@@ -39,8 +39,8 @@ class PointLight : public Light
     Q_OBJECT
 
     SIMPLE_NOTIFYING_PROPERTY(QVector3D, position)
-    SIMPLE_NOTIFYING_PROPERTY(QColor, color)
-    SIMPLE_NOTIFYING_PROPERTY(double, intensity)
+    SIMPLE_NOTIFYING_PROPERTY_WDECL(QColor, color)
+    SIMPLE_NOTIFYING_PROPERTY_WDECL(double, intensity)
 
 public:
     explicit PointLight(QObject *parent = 0);

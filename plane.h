@@ -50,7 +50,7 @@ private:
 
 private:
     double m_d;
-
+    QVector4D m_n;
     
 };
 

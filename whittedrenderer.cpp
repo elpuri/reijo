@@ -120,8 +120,10 @@ void WhittedRenderer::renderScanline(int y)
             QVector3D shaded;
             for (int i=0; i < m_samplesPerPixel; i++) {
                 Ray primaryRay;
-                float xSample = x * xStep + MathUtils::randomf() * xStep;
-                float ySample = y * yStep + MathUtils::randomf() * yStep;
+                float xJitter = i == 0 ? 0.0 : (MathUtils::randomf() * xStep);
+                float yJitter = i == 0 ? 0.0 : (MathUtils::randomf() * yStep);
+                float xSample = x * xStep + xJitter;
+                float ySample = y * yStep + yJitter;
                 m_activeCamera->generateRay(primaryRay, xSample, ySample, aspect);
                 shaded += trace(primaryRay, 0, m_shapes, m_lights) * sampleScaler;
             }
@@ -152,7 +154,7 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
         QColor color = material ? material->color() : QColor(40, 40, 40);
         QVector3D diffuseColor(color.redF(), color.greenF(), color.blueF());
         QVector4D hitPoint = primaryRay.along(minDist);
-        QVector4D normalVector = closestShape->surfaceNormal(hitPoint);
+        QVector4D normalVector = closestShape->surfaceNormal(hitPoint, primaryRay);
         QVector4D viewVector = primaryRay.origin() - hitPoint;
         foreach(Light* light, lights) {
 

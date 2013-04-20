@@ -16,7 +16,7 @@ public:
 
 
     virtual bool intersect(const Ray& ray, double& t);
-    virtual QVector4D surfaceNormal(const QVector4D& p);
+    virtual QVector4D surfaceNormal(const QVector4D& p, const Ray& ray);
 
     void classBegin();
     void componentComplete();

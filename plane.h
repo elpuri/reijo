@@ -40,7 +40,7 @@ public:
     explicit Plane(QObject *parent = 0);
 
     bool intersect(const Ray &ray, double &t);
-    QVector4D surfaceNormal(const QVector4D &p);
+    QVector4D surfaceNormal(const QVector4D &p, const Ray& ray);
 
     QString dumpProperties();
 

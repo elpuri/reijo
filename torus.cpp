@@ -88,7 +88,7 @@ bool Torus::intersect(const Ray &ray, double &t)
 
 }
 
-QVector4D Torus::surfaceNormal(const QVector4D &p)
+QVector4D Torus::surfaceNormal(const QVector4D &p, const Ray& ray)
 {
     // Transform hit point to object space
     QVector4D objectP = m_worldToObject * p;

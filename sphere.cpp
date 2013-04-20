@@ -67,7 +67,7 @@ bool Sphere::intersect(const Ray &ray, double &t)
     return false;
 }
 
-QVector4D Sphere::surfaceNormal(const QVector4D &p)
+QVector4D Sphere::surfaceNormal(const QVector4D &p, const Ray& ray)
 {
     QVector4D origin(0.0, 0.0, 0.0, 1.0);
     QVector4D objectP = m_worldToObject * p;

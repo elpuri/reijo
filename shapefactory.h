@@ -52,7 +52,7 @@ class ShapeFactory : public Shape
 public:
     explicit ShapeFactory(QObject *parent = 0);
     virtual bool intersect(const Ray& ray, double& t) { return false; }
-    virtual QVector4D surfaceNormal(const QVector4D& p) { return QVector4D(); }
+    virtual QVector4D surfaceNormal(const QVector4D& p, const Ray& ray) { return QVector4D(); }
     static ShapeFactoryAttachedProperties* qmlAttachedProperties(QObject* factory);
 
 signals:

@@ -41,7 +41,7 @@ QString Plane::dumpProperties()
     return props;
 }
 
-QVector4D Plane::surfaceNormal(const QVector4D &p)
+QVector4D Plane::surfaceNormal(const QVector4D &p, const Ray& ray)
 {
     return QVector4D(m_normal, 0.0);
 }

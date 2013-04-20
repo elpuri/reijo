@@ -128,6 +128,14 @@ qreal Scene::time()
     return m_time;
 }
 
+void Scene::timeSetter(qreal time)
+{
+    if (time != m_time) {
+        m_time = time;
+        emit timeChanged();
+    }
+}
+
 bool Scene::advanceFrame()
 {
     m_time += m_frameTime;

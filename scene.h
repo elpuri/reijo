@@ -44,9 +44,9 @@ class Scene : public SceneNode
 
     SIMPLE_PROPERTY(Camera*, camera)
     SIMPLE_PROPERTY(Renderer*, renderer)
-    SIMPLE_PROPERTY(qreal, duration)
-    SIMPLE_PROPERTY(qreal, frameTime)
-    Q_PROPERTY(qreal time READ time NOTIFY timeChanged)
+    SIMPLE_NOTIFYING_PROPERTY(qreal, duration)
+    SIMPLE_NOTIFYING_PROPERTY(qreal, frameTime)
+    Q_PROPERTY(qreal time READ time WRITE timeSetter NOTIFY timeChanged)
 
 public:
     explicit Scene(QObject *parent = 0);
@@ -61,6 +61,7 @@ public:
 
     bool advanceFrame();
     qreal time();
+    void timeSetter(qreal time);
 
 signals:
     void timeChanged();

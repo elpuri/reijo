@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     plane.cpp \
     hdrviewersettings.cpp \
     videoencoder.cpp \
-    torus.cpp
+    torus.cpp \
+    disc.cpp
 
 HEADERS += \
     proputils.h \
@@ -55,7 +56,8 @@ HEADERS += \
     plane.h \
     hdrviewersettings.h \
     videoencoder.h \
-    torus.h
+    torus.h \
+    disc.h
 
 OTHER_FILES += \
     qml/testscene.qml \

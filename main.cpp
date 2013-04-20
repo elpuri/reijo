@@ -41,6 +41,7 @@
 #include "mathutils.h"
 #include "videoencoder.h"
 #include "torus.h"
+#include "disc.h"
 
 int main(int argc, char *argv[])
 {
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Plane>("Reijo", 1, 0, "Plane");
     qmlRegisterType<VideoEncoder>("Reijo", 1, 0, "VideoEncoder");
     qmlRegisterType<Torus>("Reijo", 1, 0, "Torus");
+    qmlRegisterType<Disc>("Reijo", 1, 0, "Disc");
 
     QQmlEngine engine;
     QQmlComponent qmlComponent(&engine, "qml/torustest.qml");

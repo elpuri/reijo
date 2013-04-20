@@ -129,6 +129,7 @@ void Camera::calcTransformation()
     QVector3D up = m_up.normalized();
     QVector3D gaze = (m_target - m_position).normalized();
     QVector3D right = QVector3D::crossProduct(-gaze, up);
+    up = QVector3D::crossProduct(gaze, right);
 
     // The ONB defined by right, up and gaze sets up the rotation and then we use the
     // camera position for translation

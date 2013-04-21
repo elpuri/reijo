@@ -29,6 +29,7 @@ class VideoEncoder : public QObject,
     SIMPLE_PROPERTY(int, gop)
     SIMPLE_PROPERTY(int, bitrate)
     SIMPLE_PROPERTY(int, fps)
+    SIMPLE_PROPERTY(bool, autoStartPlayer)
 
 public:
     explicit VideoEncoder(QObject *parent = 0);

@@ -1,6 +1,7 @@
 #include "videoencoder.h"
 #include "renderer.h"
 
+#include <QDesktopServices>
 
 #define checkPtr(ptr)\
     if (!ptr) {\
@@ -14,7 +15,8 @@ VideoEncoder::VideoEncoder(QObject *parent) :
     m_bitrate(500000),
     m_gop(30),
     m_fps(30),
-    m_swsContext(nullptr)
+    m_swsContext(nullptr),
+    m_autoStartPlayer(false)
 {
     avcodec_register_all();
     av_register_all();
@@ -94,7 +96,7 @@ void VideoEncoder::onRenderingStarted()
     m_codecContext->qcompress = 0.6;
     m_codecContext->max_qdiff = 4;
     m_codecContext->pix_fmt = PIX_FMT_YUV420P;
-    m_codecContext->time_base = (AVRational) { 1, 30 };
+    m_codecContext->time_base = (AVRational) { 1, m_fps };
 
     m_codecContext->coder_type = 1;  // coder = 1
     m_codecContext->me_subpel_quality = 7;   // subq=7
@@ -222,4 +224,9 @@ void VideoEncoder::onRenderingCompleted()
 
     avio_close(m_formatContext->pb);
     av_free(m_formatContext);
+
+    if (m_autoStartPlayer) {
+        QFileInfo info(m_filename);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(info.canonicalFilePath()));
+    }
 }

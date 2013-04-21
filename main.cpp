@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Box>("Reijo", 1, 0, "Box");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/boxtest.qml");
+    QQmlComponent qmlComponent(&engine, "qml/cubearray.qml");
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;

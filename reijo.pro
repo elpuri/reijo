@@ -70,7 +70,10 @@ OTHER_FILES += \
     README.md \
     qml/rainbowballs.qml \
     qml/torustest.qml \
-    qml/boxtest.qml
+    qml/boxtest.qml \
+    qml/cubearray.qml \
+    qml/MarkerSphere.qml \
+    qml/MirrorBall.qml
 
 FORMS += \
     hdrviewersettings.ui

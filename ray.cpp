@@ -48,14 +48,6 @@ void Ray::dump()
     qDebug() << "Ray -- pos:" << m_o << "direction:" << m_d;
 }
 
-Ray Ray::operator*(const QMatrix4x4& m) const
-{
-    Ray r;
-    r.m_o = m * m_o;
-    r.m_d = m * m_d;
-    return r;
-}
-
 QVector4D Ray::along(double t) const
 {
     return m_o + t * m_d;

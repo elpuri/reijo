@@ -41,7 +41,12 @@ public:
 
     void dump();
 
-    Ray operator*(const QMatrix4x4& m) const;
+    Ray operator*(const QMatrix4x4& m) const {
+        Ray r; r.m_o = m * m_o;
+        r.m_d = m * m_d;
+        return r;
+    }
+
     friend QDebug operator<<(QDebug dbg, const Ray &r);
 private:
     QVector4D m_o;

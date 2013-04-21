@@ -18,7 +18,7 @@ NullShape {
     Material {
         id: defaultMaterial
         diffuseReflectivity: 0.8
-        ambientReflectivity: 0.15
+        ambientReflectivity: 0.08
         color: "white"
     }
 

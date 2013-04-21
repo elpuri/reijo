@@ -34,7 +34,8 @@ SOURCES += main.cpp \
     hdrviewersettings.cpp \
     videoencoder.cpp \
     torus.cpp \
-    disc.cpp
+    disc.cpp \
+    box.cpp
 
 HEADERS += \
     proputils.h \
@@ -57,7 +58,8 @@ HEADERS += \
     hdrviewersettings.h \
     videoencoder.h \
     torus.h \
-    disc.h
+    disc.h \
+    box.h
 
 OTHER_FILES += \
     qml/testscene.qml \
@@ -67,7 +69,8 @@ OTHER_FILES += \
     qml/animscene.qml \
     README.md \
     qml/rainbowballs.qml \
-    qml/torustest.qml
+    qml/torustest.qml \
+    qml/boxtest.qml
 
 FORMS += \
     hdrviewersettings.ui

@@ -42,6 +42,7 @@
 #include "videoencoder.h"
 #include "torus.h"
 #include "disc.h"
+#include "box.h"
 
 int main(int argc, char *argv[])
 {
@@ -62,9 +63,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<VideoEncoder>("Reijo", 1, 0, "VideoEncoder");
     qmlRegisterType<Torus>("Reijo", 1, 0, "Torus");
     qmlRegisterType<Disc>("Reijo", 1, 0, "Disc");
+    qmlRegisterType<Box>("Reijo", 1, 0, "Box");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/torustest.qml");
+    QQmlComponent qmlComponent(&engine, "qml/boxtest.qml");
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;
@@ -78,9 +80,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-//    scene->dumpNodes();
     scene->render();
 
     return a.exec();
-
 }

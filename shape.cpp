@@ -56,14 +56,14 @@ void Shape::classBegin()
 
 void Shape::applyParentMatrix(const QMatrix4x4 m)
 {
-    m_transformation.setToIdentity();
-    m_transformation.translate(m_position);
-    m_transformation.rotate(m_rotation.x(), 1.0, 0.0, 0.0);
-    m_transformation.rotate(m_rotation.y(), 0.0, 1.0, 0.0);
-    m_transformation.rotate(m_rotation.z(), 0.0, 0.0, 1.0);
-    m_transformation.scale(m_scale);
+    QMatrix4x4 localTransformation;
+    localTransformation.translate(m_position);
+    localTransformation.rotate(m_rotation.x(), 1.0, 0.0, 0.0);
+    localTransformation.rotate(m_rotation.y(), 0.0, 1.0, 0.0);
+    localTransformation.rotate(m_rotation.z(), 0.0, 0.0, 1.0);
+    localTransformation.scale(m_scale);
 
-    m_objectToWorld = m * m_transformation;
+    m_objectToWorld = m * localTransformation;
     bool invertible;
     m_worldToObject = m_objectToWorld.inverted(&invertible);
     assert(invertible);

@@ -61,7 +61,6 @@ public:
     QString dumpProperties();
 
 protected:
-    QMatrix4x4 m_transformation;
     QMatrix4x4 m_objectToWorld;
     QMatrix4x4 m_worldToObject;
 };

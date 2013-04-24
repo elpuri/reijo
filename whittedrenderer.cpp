@@ -46,6 +46,7 @@ WhittedRenderer::WhittedRenderer(QObject *parent) :
     m_hwThreadCount = std::thread::hardware_concurrency();
     if (m_hwThreadCount == 0)
         m_hwThreadCount = 8;
+    QThreadPool::globalInstance()->setMaxThreadCount(m_hwThreadCount);
 }
 
 
@@ -87,11 +88,14 @@ void WhittedRenderer::render(Scene* scene)
             runnable->setAutoDelete(true);
             pool->start(runnable);
         }
-
-        pool->waitForDone();
+        // TODO: write a thread pool that sends a signal when job is complete
+        while (!pool->waitForDone(25)) {
+            qApp->processEvents();
+        }
 
         qDebug() << "Frame complete in:" << elapsed.elapsed() << "ms";
         emit frameComplete();
+        qApp->processEvents();
     } while(scene->advanceFrame());
 
     emit renderingComplete();

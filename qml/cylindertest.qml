@@ -10,11 +10,10 @@ Scene {
     time: 0.0
 
     property bool mini : false
-
     WhittedRenderer {
         id: whitted
-        renderedWidth: mini ? 40 : 640
-        renderedHeight: mini ? 40 : 360
+        renderedWidth: mini ? 40 : 480
+        renderedHeight: mini ? 40 : 320
         maxRecursionDepth: 5
         ambientLightColor: Qt.vector3d(1.0, 1.0, 1.0)
         antiAliasing: WhittedRenderer.JitteredSamples
@@ -38,7 +37,7 @@ Scene {
         id: cam
         position: Qt.vector3d(7.0,9.0, -13.0)
         lookAt: Qt.vector3d(0.0, 4.0, 0.0)
-        fov: 50
+        fov: 40
     }
 
 
@@ -49,6 +48,9 @@ Scene {
         roomDepth: 16.0
         rearWallVisible: false
         rightWallVisible: false
+        floorMaterial: Material {
+            reflectivity: 0.5
+        }
 
         Cylinder {
            id: box

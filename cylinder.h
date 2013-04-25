@@ -11,11 +11,15 @@ class Cylinder : public Shape
 
     SIMPLE_NOTIFYING_PROPERTY_WDECL(qreal, radius)
     SIMPLE_NOTIFYING_PROPERTY(qreal, length)
+    SIMPLE_NOTIFYING_PROPERTY(bool, hasCaps)
 
 public:
     Cylinder();
     bool intersect(const Ray &ray, double &t);
     QVector4D surfaceNormal(const QVector4D &p, const Ray &ray);
+
+private:
+    bool intersectCap(const Ray& localRay, double &t);
 
 private:
     qreal m_rSq;

@@ -43,6 +43,7 @@
 #include "torus.h"
 #include "disc.h"
 #include "box.h"
+#include "cylinder.h"
 
 int main(int argc, char *argv[])
 {
@@ -64,9 +65,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<Torus>("Reijo", 1, 0, "Torus");
     qmlRegisterType<Disc>("Reijo", 1, 0, "Disc");
     qmlRegisterType<Box>("Reijo", 1, 0, "Box");
+    qmlRegisterType<Cylinder>("Reijo", 1, 0, "Cylinder");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/cubearray.qml");
+    QQmlComponent qmlComponent(&engine, "qml/cylindertest.qml");
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;

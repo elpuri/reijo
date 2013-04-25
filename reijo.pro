@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     videoencoder.cpp \
     torus.cpp \
     disc.cpp \
-    box.cpp
+    box.cpp \
+    cylinder.cpp
 
 HEADERS += \
     proputils.h \
@@ -59,7 +60,8 @@ HEADERS += \
     videoencoder.h \
     torus.h \
     disc.h \
-    box.h
+    box.h \
+    cylinder.h
 
 OTHER_FILES += \
     qml/testscene.qml \
@@ -73,7 +75,8 @@ OTHER_FILES += \
     qml/boxtest.qml \
     qml/cubearray.qml \
     qml/MarkerSphere.qml \
-    qml/MirrorBall.qml
+    qml/MirrorBall.qml \
+    qml/cylindertest.qml
 
 FORMS += \
     hdrviewersettings.ui

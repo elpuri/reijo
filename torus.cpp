@@ -73,13 +73,13 @@ bool Torus::intersect(const Ray &ray, double &t)
     if (solutionCount < 1)
         return false;
 
-    double minT = 999999999999.0;
+    double minT = INFINITY;
     for (int i=0; i < solutionCount; i++) {
-        if (solutions[i] < minT)
+        if (solutions[i] > MathUtils::dEpsilon && solutions[i] < minT)
             minT = solutions[i];
     }
 
-    if (minT > MathUtils::dEpsilon) {
+    if (minT < INFINITY) {
         t = minT;
         return true;
     }

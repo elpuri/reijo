@@ -18,7 +18,7 @@ Scene {
         maxRecursionDepth: 5
         ambientLightColor: Qt.vector3d(1.0, 1.0, 1.0)
         antiAliasing: WhittedRenderer.JitteredSamples
-        samplesPerPixel: 16
+        samplesPerPixel: 1
     }
 
     HdrViewer {
@@ -27,13 +27,13 @@ Scene {
         gamma: 1.3
         exposure: 1.0
     }
-
+/*
     VideoEncoder {
         renderer: whitted
         filename: "torus.mp4"
         bitrate: 2000000
     }
-
+*/
     Camera {
         id: cam
         position: Qt.vector3d(0.0, 5.0, -13.0)
@@ -49,22 +49,29 @@ Scene {
         roomDepth: 16.0
         rearWallVisible: false
         rightWallVisible: false
+/*
+        ShapeFactory {
+            position: Qt.vector3d(0.0, 4.0, -3.0)
+            model: 20
+            componentSelectorScript:
 
-        Box {
-            id: box
-            scale: Qt.vector3d(1.0, 2.0, 1.0)
-            position: Qt.vector3d(0.0, 2.0, 0.0)
-            rotation: Qt.vector3d(0.0, 33.0, 0.0)
-
-            material: Material {
-                color: "#ff0000"
-                ambientReflectivity: 0.00
-                diffuseReflectivity: 0.7
-                specularReflectivity: 1.0
-                shininess: 50
-                reflectivity: 0.0
-            }
         }
+*/
+        Box {
+                       id: box
+                       scale: Qt.vector3d(2.0, 4.0, 0.24)
+                       position: Qt.vector3d(0.0, 2.0, -3.0)
+                       rotation: Qt.vector3d(0.0, 33.0, 0.0)
+
+                       material: Material {
+                           color: "#ff0000"
+                           ambientReflectivity: 0.00
+                           diffuseReflectivity: 0.7
+                           specularReflectivity: 1.0
+                           shininess: 50
+                           reflectivity: 0.0
+                       }
+                   }
 
 
         PointLight {

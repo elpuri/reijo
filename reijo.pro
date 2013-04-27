@@ -78,7 +78,8 @@ OTHER_FILES += \
     qml/MirrorBall.qml \
     qml/cylindertest.qml \
     qml/transparencytest.qml \
-    qml/glassyanim.qml
+    qml/glassyanim.qml \
+    qml/glasstorusanim.qml
 
 FORMS += \
     hdrviewersettings.ui

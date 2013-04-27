@@ -121,6 +121,24 @@ void Camera::onTargetObjectPositionChanged()
     calcTransformation();
 }
 
+void Camera::fovSetter(float fov)
+{
+    if (fov != m_fov) {
+        m_fov = fov;
+        emit fovChanged();
+        calcTransformation();
+    }
+}
+
+void Camera::positionSetter(QVector3D position)
+{
+    if (position != m_position) {
+        m_position = position;
+        emit positionChanged();
+        calcTransformation();
+    }
+}
+
 void Camera::calcTransformation()
 {
     m_transformation.setToIdentity();

@@ -40,8 +40,8 @@ class Camera : public SceneNode
 {
     Q_OBJECT
 
-    SIMPLE_NOTIFYING_PROPERTY(QVector3D, position)
-    SIMPLE_NOTIFYING_PROPERTY(float, fov)
+    SIMPLE_NOTIFYING_PROPERTY_WDECL(QVector3D, position)
+    SIMPLE_NOTIFYING_PROPERTY_WDECL(float, fov)
     SIMPLE_NOTIFYING_PROPERTY_DECL(QVariant, lookAt)
     SIMPLE_NOTIFYING_PROPERTY_DECL(QVector3D, up)
 

@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Cylinder>("Reijo", 1, 0, "Cylinder");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/cylindertest.qml");
+    QQmlComponent qmlComponent(&engine, "qml/transparencytest.qml");
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;

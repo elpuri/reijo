@@ -59,9 +59,17 @@ bool Sphere::intersect(const Ray &ray, double &t)
 
     double t1, t2;
     if (MathUtils::solveQuadratic(a, b, c, t1, t2)) {
-        t = fmin(t1, t2);
-        if (t > MathUtils::dEpsilon)
-        return true;
+        if (t1 > t2)
+            qSwap<double>(t1, t2);
+        if (t1 > MathUtils::dEpsilon) {
+            t = t1;
+            return true;
+        }
+
+        if (t2 > MathUtils::dEpsilon) {
+            t = t2;
+            return true;
+        }
     }
 
     return false;

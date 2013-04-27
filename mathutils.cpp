@@ -26,12 +26,13 @@
 #include "mathutils.h"
 #include <math.h>
 #include <stdlib.h>
+#include <QDebug>
 
 MathUtils::MathUtils()
 {
 }
 
-const double MathUtils::dEpsilon = 1e-5d;
+const double MathUtils::dEpsilon = 3e-5d;
 const float MathUtils::fEpsilon = 1e-5f;
 
 bool MathUtils::solveQuadratic(const double a, const double b, const double c, double &t1, double &t2)
@@ -46,14 +47,29 @@ bool MathUtils::solveQuadratic(const double a, const double b, const double c, d
     return true;
 }
 
-QVector4D MathUtils::reflect(const QVector4D &incident, const QVector4D normal)
+QVector4D MathUtils::reflect(const QVector4D &incident, const QVector4D& normal)
 {
     return incident - 2 * QVector4D::dotProduct(incident, normal) * normal;
 }
 
-QVector4D MathUtils::refract(const QVector4D &incident, const float n1, const float n2)
+bool MathUtils::refract(const QVector4D &incident, const QVector4D &normal,
+                             const float nOutside, const float nInside, QVector4D &refracted, bool fromInside)
 {
+    double n = nInside / nOutside;
+    double nInv = 1.0 / n;
+    double cosPhiI = -QVector4D::dotProduct(incident, normal);
 
+    double cosPhiISq = cosPhiI * cosPhiI;
+    double nInvSq = nInv * nInv;
+    double cosPhiT = 1.0 - (nInvSq * (1.0 - cosPhiISq));
+    if (cosPhiT <= 0.0)
+        return true;       // total internal reflection
+    cosPhiT = sqrt(cosPhiT);
+//    qDebug() << nInv << incident << cosPhiT << cosPhiI << normal << n;
+    refracted = nInv * incident - (cosPhiT - nInv * cosPhiI) * normal;
+//    qDebug() << incident << refracted << n;
+
+    return false;
 }
 
 float MathUtils::randomf()

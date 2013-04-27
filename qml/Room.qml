@@ -28,6 +28,7 @@ NullShape {
         normal: Qt.vector3d(1.0, 0.0, 0.0)
         point: Qt.vector3d(-roomWidth / 2.0, 0.0, 0.0)
         material: wallMaterial
+        objectName: "leftWall"
     }
 
     // Right wall
@@ -36,6 +37,7 @@ NullShape {
         normal: Qt.vector3d(-1.0, 0.0, 0.0)
         point: Qt.vector3d(roomWidth / 2.0, 0.0, 0.0)
         material: wallMaterial
+        objectName: "rightWall"
     }
 
     // Front wall
@@ -44,6 +46,7 @@ NullShape {
         normal: Qt.vector3d(0.0, 0.0, -1.0)
         point: Qt.vector3d(0.0, 0.0, roomDepth / 2.0)
         material: wallMaterial
+        objectName: "frontWall"
     }
 
     // Rear wall
@@ -52,6 +55,7 @@ NullShape {
         normal: Qt.vector3d(0.0, 0.0, -1.0)
         point: Qt.vector3d(0.0, 0.0, -roomDepth / 2.0)
         material: wallMaterial
+        objectName: "rearWall"
     }
 
     // Floor
@@ -60,6 +64,7 @@ NullShape {
         normal: Qt.vector3d(0.0, 1.0, 0.0)
         point: Qt.vector3d(0.0, 0.0, 0.0)
         material: floorMaterial
+        objectName: "floor"
     }
 
     // Ceiling
@@ -68,5 +73,6 @@ NullShape {
         normal: Qt.vector3d(0.0, -1.0, 0.0)
         point: Qt.vector3d(0.0, roomHeight, 0.0)
         material: ceilingMaterial
+        objectName: "ceiling"
     }
 }

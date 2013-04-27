@@ -32,6 +32,7 @@ Material::Material(QObject *parent) :
     m_diffuseReflectivity(0.0),
     m_specularReflectivity(0.0),
     m_shininess(3.0),
-    m_reflectivity(0.0)
+    m_reflectivity(0.0),
+    m_indexOfRefraction(1.0)
 {
 }

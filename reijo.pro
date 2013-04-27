@@ -76,7 +76,8 @@ OTHER_FILES += \
     qml/cubearray.qml \
     qml/MarkerSphere.qml \
     qml/MirrorBall.qml \
-    qml/cylindertest.qml
+    qml/cylindertest.qml \
+    qml/transparencytest.qml
 
 FORMS += \
     hdrviewersettings.ui

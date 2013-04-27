@@ -152,14 +152,13 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
 
     QVector3D shaded;
     if (closestShape) {
-
         auto material = closestShape->material();
         shaded = material->ambientReflectivity() * m_ambientLightColor * material->colorVector();
         QColor color = material ? material->color() : QColor(40, 40, 40);
         QVector3D diffuseColor(color.redF(), color.greenF(), color.blueF());
         QVector4D hitPoint = primaryRay.along(minDist);
         QVector4D normalVector = closestShape->surfaceNormal(hitPoint, primaryRay);
-        QVector4D viewVector = primaryRay.origin() - hitPoint;
+        QVector4D viewVector = -primaryRay.direction();
         foreach(Light* light, lights) {
 
             QVector3D emittance;
@@ -194,7 +193,7 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
                 // Specular
                 if (material->specularReflectivity() > 0.0) {
                     QVector4D reflectedLightVector = MathUtils::reflect(-lightVector, normalVector); // lightVector and normalVector are already normalized
-                    float dot = QVector4D::dotProduct(reflectedLightVector, viewVector.normalized());
+                    float dot = QVector4D::dotProduct(reflectedLightVector, viewVector);
                     if (dot > 0.0)
                         shaded += material->specularReflectivity() * pow(dot, material->shininess()) * emittance;
                 }
@@ -210,11 +209,27 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
             }
 
             if (material && material->transmittance() > 0.0) {
+                bool inside = QVector4D::dotProduct(viewVector, normalVector) < 0;
+                QVector4D refractionVector;
+                bool totalReflection;
 
+                if (!inside)    // outside
+                    totalReflection =  MathUtils::refract(primaryRay.direction(), normalVector, 1.0, material->indexOfRefraction(), refractionVector, inside);
+                else    // inside
+                    totalReflection =  MathUtils::refract(primaryRay.direction(), -normalVector, material->indexOfRefraction(), 1.0, refractionVector, inside);
+
+                if (!totalReflection) {
+                    Ray transmittedRay(hitPoint, refractionVector);
+                    QVector3D tc = trace(transmittedRay, depth + 1, shapes, lights);
+                    shaded += material->transmittance() * tc * material->colorVector();
+                } else {
+                    Ray totalReflectionRay(hitPoint, MathUtils::reflect(primaryRay.direction(), -normalVector));
+                    shaded += trace(totalReflectionRay, depth + 1, shapes, lights);
+                }
             }
-            // TODO: spawn transmitted ray
         }
     }
+
     return shaded;
 }
 

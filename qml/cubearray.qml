@@ -5,7 +5,7 @@ Scene {
     id: scene
     camera: cam
     renderer: whitted
-    duration: 15.0
+    duration: 30.0
     time: 0.0
     frameTime: 1 / 30.0     // 30fps
 
@@ -14,8 +14,8 @@ Scene {
 
     VideoEncoder {
         renderer: whitted
-        filename: "cubismo.mp4"
-        bitrate: 3000000
+        filename: "cubismo_hd.mp4"
+        bitrate: 6000000
         fps: 30
         autoStartPlayer: true
     }
@@ -23,12 +23,12 @@ Scene {
 
     WhittedRenderer {
         id: whitted
-        renderedWidth: mini ? 20 : 640
-        renderedHeight: mini ? 20 : 430
+        renderedWidth: mini ? 320 : 1280
+        renderedHeight: mini ? 240 : 720
         maxRecursionDepth: 5
         ambientLightColor: Qt.vector3d(1.0, 1.0, 1.0)
         antiAliasing: WhittedRenderer.JitteredSamples
-        samplesPerPixel: 1
+        samplesPerPixel: 8
     }
 
     HdrViewer {
@@ -74,7 +74,7 @@ Scene {
         Camera {
             id: cam
             position: Qt.vector3d(6.0, 7.0, -16.0)
-            lookAt: clump
+            lookAt: Qt.vector3d(-1.5, 5.0, 0.0)
             fov: 30
         }
 
@@ -97,8 +97,8 @@ Scene {
                     color: Qt.hsla(box.ShapeFactory.index / 32.0 % 1.0 , 1.0, 0.5, 1.0)
                     diffuseReflectivity: 0.8
                     ambientReflectivity: 0.05
-                    specularReflectivity: 1.0
-                    shininess: 50
+                    specularReflectivity: 10.0
+                    shininess: 250
                 }
             }
         }
@@ -110,7 +110,7 @@ Scene {
         }
 
         PointLight {
-            position: Qt.vector3d(3.0, 7.0, -16.0)
+            position: Qt.vector3d(-2.0, 7.0, -16.0)
             color: "white"
             intensity: 18.0
         }

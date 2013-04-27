@@ -49,6 +49,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    if (argc != 2) {
+        qDebug() << "Usage: reijo <qml file>";
+        return 0;
+    }
+
     qmlRegisterType<Scene>("Reijo", 1, 0, "Scene");
     qmlRegisterType<Camera>("Reijo", 1, 0, "Camera");
     qmlRegisterType<ShapeFactory>("Reijo", 1, 0, "ShapeFactory");
@@ -68,7 +73,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Cylinder>("Reijo", 1, 0, "Cylinder");
 
     QQmlEngine engine;
-    QQmlComponent qmlComponent(&engine, "qml/transparencytest.qml");
+    QQmlComponent qmlComponent(&engine, QString(argv[1]));
     if (qmlComponent.isError()) {
         qDebug() << qmlComponent.errorString();
         return 0;

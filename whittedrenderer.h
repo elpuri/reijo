@@ -38,6 +38,7 @@ class Ray;
 class Shape;
 class Light;
 class Camera;
+class RegularGrid;
 
 class WhittedRenderer : public Renderer,
                         public QQmlParserStatus
@@ -61,6 +62,9 @@ public:
     void render(Scene* scene);
     void copyRenderBuffer(float *&buffer);
 
+public slots:
+    void onPicked(const int x, const int y);
+
 protected:
     void classBegin();
     void componentComplete();
@@ -78,6 +82,8 @@ private:
     Camera* m_activeCamera;
     QList<Shape*> m_shapes;
     QList<Light*> m_lights;
+
+    RegularGrid* m_grid;
 
     friend class WhittedRunnable;
 

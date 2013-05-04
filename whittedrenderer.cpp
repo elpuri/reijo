@@ -34,6 +34,8 @@
 #include "light.h"
 #include "material.h"
 #include "mathutils.h"
+#include "regulargrid.h"
+#include "hdrviewer.h"
 
 WhittedRenderer::WhittedRenderer(QObject *parent) :
     Renderer(parent),
@@ -41,17 +43,21 @@ WhittedRenderer::WhittedRenderer(QObject *parent) :
     m_maxRecursionDepth(5),
     m_coloredShadows(false),
     m_samplesPerPixel(4),
-    m_antiAliasing(None)
+    m_antiAliasing(None),
+    m_grid(nullptr)
 {
     m_hwThreadCount = std::thread::hardware_concurrency();
     if (m_hwThreadCount == 0)
         m_hwThreadCount = 8;
+    qDebug() << m_hwThreadCount;
     QThreadPool::globalInstance()->setMaxThreadCount(m_hwThreadCount);
 }
 
 
 void WhittedRenderer::render(Scene* scene)
 {
+    if (m_viewer)
+        connect(m_viewer, &HdrViewer::clicked, this, &WhittedRenderer::onPicked);
 
     // TODO: this stuff should go to the base class
     qDebug() << Q_FUNC_INFO;
@@ -63,6 +69,7 @@ void WhittedRenderer::render(Scene* scene)
     m_shapes = scene->gatherShapes();
     m_lights.clear();
     m_lights = scene->gatherLights();
+
 
     qDebug() << "Rendering" << m_shapes.count() << "shapes with" << m_lights.count() << "lights";
 
@@ -78,10 +85,19 @@ void WhittedRenderer::render(Scene* scene)
 
     emit renderingStarted();
     do {
+        qDebug() << "Starting new frame" << scene->time();
+
         QElapsedTimer elapsed;
         elapsed.start();
 
-        qDebug() << "Starting new frame" << scene->time();
+        QElapsedTimer gridTime;
+        gridTime.start();
+        if (m_grid)
+            delete m_grid;
+        m_grid = new RegularGrid();
+        m_grid->initialize(m_shapes);
+        qDebug() << "Generated acceleration structure in" << gridTime.elapsed() << "ms";
+
         auto pool = QThreadPool::globalInstance();
         for (int i=0; i < m_hwThreadCount; i++) {
             WhittedRunnable* runnable = new WhittedRunnable(this, i, m_hwThreadCount);
@@ -138,20 +154,11 @@ void WhittedRenderer::renderScanline(int y)
 
 QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<Shape*>& shapes, const QList<Light*>& lights)
 {
-    double minDist = INFINITY;
+    double minDist = std::numeric_limits<double>::max();
     Shape* closestShape = nullptr;
-    foreach(Shape* s, shapes) {
-        double hitDist;
-        if (s->intersect(primaryRay, hitDist)) {
-            if (hitDist < minDist) {
-                minDist = hitDist;
-                closestShape = s;
-            }
-        }
-    }
 
     QVector3D shaded;
-    if (closestShape) {
+    if (m_grid->intersect(primaryRay, closestShape, minDist)) {
         auto material = closestShape->material();
         shaded = material->ambientReflectivity() * m_ambientLightColor * material->colorVector();
         QColor color = material ? material->color() : QColor(40, 40, 40);
@@ -170,19 +177,10 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
             lightVector.normalize();
 
             Ray shadowRay(hitPoint, lightVector);
-            bool inShadow = false;
             double t;
-            foreach(Shape* shape, shapes) {
-                if (shape != closestShape && shape->castsShadows()) {
-                    bool intersects = shape->intersect(shadowRay, t);
-                    bool furtherThanLight = lightVectorLengthSquared <  t * t;
-                    inShadow = intersects && t > 0.0 && !furtherThanLight;
-                    if (inShadow)
-                        break;
-                }
-            }
-
-            if (!inShadow) {
+            Shape* blockingShape;
+            bool shadowRayHit = m_grid->intersect(shadowRay, blockingShape, t);
+            if (!shadowRayHit || (shadowRayHit && (lightVectorLengthSquared < t * t))) {
                 // Diffuse
                 float dot = fmax(0.0f, QVector4D::dotProduct(lightVector, normalVector)) * material->diffuseReflectivity();
                 emittance *= 1 / (1 + 0.2 * lightVectorLength + 0.08 * lightVectorLengthSquared);
@@ -229,7 +227,6 @@ QVector3D WhittedRenderer::trace(const Ray& primaryRay, int depth, const QList<S
             }
         }
     }
-
     return shaded;
 }
 
@@ -265,4 +262,43 @@ void WhittedRenderer::WhittedRunnable::run()
         m_renderer->renderScanline(line);
         line += m_interleaveCount;
     }
+}
+
+// For debugging purposes
+void WhittedRenderer::onPicked(const int x, const int y)
+{
+    /*
+    float aspect = (float) m_renderedWidth / m_renderedHeight;
+    float xStep = 1.0 / (m_renderedWidth - 1);
+    float yStep = 1.0 / (m_renderedHeight - 1);
+
+    Ray primaryRay;
+    m_activeCamera->generateRay(primaryRay, x * xStep, y * yStep, aspect);
+    Shape* hitShape = nullptr;
+    double dummyT;
+    if (!m_grid->intersect(primaryRay, hitShape, dummyT))
+        return;
+
+    qDebug() << hitShape->rotation();
+
+    BoundingBox wsbb = hitShape->worldSpaceBoundingBox();
+    qDebug() << wsbb;
+    int blfx, blfy, blfz, trbx, trby, trbz;
+    m_grid->worldCoordinatesToGridIndices(wsbb.m_blf, blfx, blfy, blfz);
+    m_grid->worldCoordinatesToGridIndices(wsbb.m_trb, trbx, trby, trbz);
+    qDebug() << "blf in grid coords" << blfx << blfy << blfz;
+    qDebug() << "trb in grid coords" << trbx << trby << trbz;
+
+    int dX = trbx - blfx, dY = trby - blfy, dZ = trbz - blfz;
+    QVector4D bbBlf = m_grid->m_gridBB.m_blf +
+            QVector4D(blfx * m_grid->m_cellSize.x(),
+                      blfy * m_grid->m_cellSize.y(),
+                      blfz * m_grid->m_cellSize.z(), 1.0);
+    QVector4D bbTrb = m_grid->m_gridBB.m_blf +
+            QVector4D((trbx + 1) * m_grid->m_cellSize.x(),
+                      (trby + 1) * m_grid->m_cellSize.y(),
+                      (trbz + 1) * m_grid->m_cellSize.z(), 1.0);
+    qDebug() << bbBlf << bbTrb;
+    qDebug() << "----------------------------------------------------------------------";
+    */
 }

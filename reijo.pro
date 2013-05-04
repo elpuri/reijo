@@ -36,7 +36,10 @@ SOURCES += main.cpp \
     torus.cpp \
     disc.cpp \
     box.cpp \
-    cylinder.cpp
+    cylinder.cpp \
+    regulargrid.cpp \
+    boundingbox.cpp \
+    imagewidget.cpp
 
 HEADERS += \
     proputils.h \
@@ -61,7 +64,10 @@ HEADERS += \
     torus.h \
     disc.h \
     box.h \
-    cylinder.h
+    cylinder.h \
+    regulargrid.h \
+    boundingbox.h \
+    imagewidget.h
 
 OTHER_FILES += \
     qml/testscene.qml \
@@ -79,7 +85,8 @@ OTHER_FILES += \
     qml/cylindertest.qml \
     qml/transparencytest.qml \
     qml/glassyanim.qml \
-    qml/glasstorusanim.qml
+    qml/glasstorusanim.qml \
+    qml/gridtestscene.qml
 
 FORMS += \
     hdrviewersettings.ui

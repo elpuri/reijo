@@ -67,9 +67,5 @@ void Shape::applyParentMatrix(const QMatrix4x4 m)
     bool invertible;
     m_worldToObject = m_objectToWorld.inverted(&invertible);
     assert(invertible);
-/*
-    qDebug() << "Trans:" << m_transformation;
-    qDebug() << "Comp trans:" << m_compositeTransformation;
-    qDebug() << "Inv comp trans:" << m_inverseCompositeTransformation;
-*/
 }
+

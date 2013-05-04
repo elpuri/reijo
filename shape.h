@@ -33,6 +33,7 @@
 #include "scenenode.h"
 #include "proputils.h"
 #include "ray.h"
+#include "boundingbox.h"
 
 class Material;
 
@@ -53,7 +54,11 @@ public:
 
     virtual bool intersect(const Ray& ray, double& t) { return false; }
     virtual QVector4D surfaceNormal(const QVector4D& p, const Ray& ray) { return QVector4D(); }
+    virtual bool hasBoundingBox() const { return false; }
+    virtual BoundingBox objectSpaceBoundingBox() const { return BoundingBox(); }
 
+    // If concrete shapes know how to produce a better fitting bounding box for the transformed shape they can overload this
+    virtual BoundingBox worldSpaceBoundingBox() const { return objectSpaceBoundingBox().transform(m_objectToWorld); }
     void classBegin();
     void componentComplete();
     void applyParentMatrix(const QMatrix4x4 m);

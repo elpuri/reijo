@@ -17,6 +17,7 @@ public:
     
     bool intersect(const Ray &ray, double &t);
     QVector4D surfaceNormal(const QVector4D &p, const Ray& ray);
+    bool hasBoundingBox() const { return true; }
 
 private:
     void calcD();

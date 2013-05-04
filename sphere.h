@@ -28,6 +28,7 @@
 
 #include "proputils.h"
 #include "shape.h"
+#include <QDebug>
 
 class Sphere : public Shape
 {
@@ -40,6 +41,12 @@ public:
 
     bool intersect(const Ray &ray, double &t);
     QVector4D surfaceNormal(const QVector4D &p, const Ray& ray);
+    bool hasBoundingBox() const { return true; }
+    BoundingBox objectSpaceBoundingBox() const {
+        return BoundingBox(QVector4D(-m_radius, -m_radius, -m_radius, 1.0),
+                           QVector4D(m_radius, m_radius, m_radius, 1.0));
+    }
+    BoundingBox worldSpaceBoundingBox() const;
 
 protected:
     QString dumpProperties();

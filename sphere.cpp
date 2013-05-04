@@ -71,7 +71,6 @@ bool Sphere::intersect(const Ray &ray, double &t)
             return true;
         }
     }
-
     return false;
 }
 
@@ -85,4 +84,16 @@ QVector4D Sphere::surfaceNormal(const QVector4D &p, const Ray& ray)
     n = a * n;
 
     return n.normalized();
+}
+
+BoundingBox Sphere::worldSpaceBoundingBox() const
+{
+    if (m_scale != QVector3D(1.0, 1.0, 1.0))
+        return Shape::worldSpaceBoundingBox();
+
+    QVector4D o(0.0, 0.0, 0.0, 1.0);
+    o = m_objectToWorld * o;
+    BoundingBox bb(o - QVector4D(m_radius, m_radius, m_radius, 0.0),
+                       o + QVector4D(m_radius, m_radius, m_radius, 0.0));
+    return bb;
 }

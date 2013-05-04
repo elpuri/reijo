@@ -1,5 +1,6 @@
 #include "box.h"
 #include "mathutils.h"
+#include "math.h"
 
 Box::Box(QObject *parent) :
     Shape(parent)
@@ -67,19 +68,20 @@ QVector4D Box::surfaceNormal(const QVector4D &p, const Ray &ray)
     Q_UNUSED(ray)
 
     // Transform hit point to object space
-    QVector4D objectP = m_worldToObject * p;
+    QVector4D op = m_worldToObject * p;
 
     QVector4D n;
-    if (qFuzzyCompare(objectP.x(), -1.0f))
+
+    if (op.x() > -1.0f - MathUtils::dEpsilon && op.x() < -1.0 + MathUtils::dEpsilon)
         n = QVector4D(-1.0, 0.0, 0.0, 0.0);
-    else if (qFuzzyCompare(objectP.x(), 1.0f))
+    else if (op.x() > 1.0f - MathUtils::dEpsilon && op.x() < 1.0 - MathUtils::dEpsilon)
         n = QVector4D(1.0, 0.0, 0.0, 0.0);
-    else if (qFuzzyCompare(objectP.y(), -1.0f))
+    else if (op.y() > -1.0f - MathUtils::dEpsilon && op.y() < -1.0 + MathUtils::dEpsilon)
         n = QVector4D(0.0, -1.0, 0.0, 0.0);
-    else if (qFuzzyCompare(objectP.y(), 1.0f))
+    else if (op.y() > 1.0f - MathUtils::dEpsilon && op.y() < 1.0 - MathUtils::dEpsilon)
         n = QVector4D(0.0, 1.0, 0.0, 0.0);
     else
-        n = QVector4D(0.0, 0.0, objectP.z(), 0.0);
+        n = QVector4D(0.0, 0.0, op.z() < 0 ? -1.0 : 1.0, 0.0);
 
     QMatrix4x4 a = m_worldToObject.transposed();
     a.setRow(3, QVector4D(0.0, 0.0, 0.0, 1.0));

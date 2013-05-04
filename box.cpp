@@ -74,11 +74,11 @@ QVector4D Box::surfaceNormal(const QVector4D &p, const Ray &ray)
 
     if (op.x() > -1.0f - MathUtils::dEpsilon && op.x() < -1.0 + MathUtils::dEpsilon)
         n = QVector4D(-1.0, 0.0, 0.0, 0.0);
-    else if (op.x() > 1.0f - MathUtils::dEpsilon && op.x() < 1.0 - MathUtils::dEpsilon)
+    else if (op.x() > 1.0f - MathUtils::dEpsilon && op.x() < 1.0 + MathUtils::dEpsilon)
         n = QVector4D(1.0, 0.0, 0.0, 0.0);
     else if (op.y() > -1.0f - MathUtils::dEpsilon && op.y() < -1.0 + MathUtils::dEpsilon)
         n = QVector4D(0.0, -1.0, 0.0, 0.0);
-    else if (op.y() > 1.0f - MathUtils::dEpsilon && op.y() < 1.0 - MathUtils::dEpsilon)
+    else if (op.y() > 1.0f - MathUtils::dEpsilon && op.y() < 1.0 + MathUtils::dEpsilon)
         n = QVector4D(0.0, 1.0, 0.0, 0.0);
     else
         n = QVector4D(0.0, 0.0, op.z() < 0 ? -1.0 : 1.0, 0.0);

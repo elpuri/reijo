@@ -27,11 +27,11 @@
 #define HDRVIEWER_H
 
 #include <QObject>
-#include <QLabel>
 #include <QtQml>
 
 #include "proputils.h"
 #include "hdrviewersettings.h"
+#include "imagewidget.h"
 
 class Renderer;
 
@@ -53,6 +53,9 @@ protected:
     void classBegin();
     void componentComplete();
 
+signals:
+    void clicked(int x, int y);
+
 public slots:
 
     void onFrameComplete();
@@ -62,7 +65,7 @@ public slots:
 
 private:
     Renderer* m_renderer;
-    QLabel m_viewWidget;
+    ImageWidget m_viewWidget;
     float* m_buffer;
     HdrViewerSettings* m_settingsUi;
     QImage* m_renderedImage;

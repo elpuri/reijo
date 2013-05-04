@@ -40,6 +40,7 @@ HdrViewer::HdrViewer(QObject *parent) :
     connect(m_settingsUi, &HdrViewerSettings::gammaChanged, this, &HdrViewer::render);
     connect(m_settingsUi, &HdrViewerSettings::exposureChanged, this, &HdrViewer::render);
     connect(m_settingsUi, &HdrViewerSettings::save, this, &HdrViewer::onSave);
+    connect(&m_viewWidget, &ImageWidget::clicked, this, &HdrViewer::clicked);
 }
 
 HdrViewer::~HdrViewer()
@@ -92,14 +93,17 @@ void HdrViewer::onFrameComplete()
     m_renderedImage = new QImage(w, h, QImage::Format_ARGB32);
     m_renderer->copyRenderBuffer(m_buffer);
     render();
+    if (!m_viewWidget.isVisible()) {
+        m_viewWidget.setWindowTitle("Reijo HDR viewer");
+        m_viewWidget.resize(w, h);
+        m_viewWidget.move(300, 200);
+        m_viewWidget.show();
 
-    m_viewWidget.setWindowTitle("Reijo HDR viewer");
-    m_viewWidget.resize(w, h);
-    m_viewWidget.move(300, 200);
-    m_viewWidget.show();
+        m_settingsUi->move(m_viewWidget.x(), m_viewWidget.y() + m_viewWidget.height() + 50);
+        m_settingsUi->show();
+    }
 
-    m_settingsUi->move(m_viewWidget.x(), m_viewWidget.y() + m_viewWidget.height() + 50);
-    m_settingsUi->show();
+
 }
 
 void HdrViewer::render()

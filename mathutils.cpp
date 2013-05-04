@@ -33,7 +33,7 @@ MathUtils::MathUtils()
 }
 
 const double MathUtils::dEpsilon = 3e-5d;
-const float MathUtils::fEpsilon = 1e-5f;
+const float MathUtils::fEpsilon = 3e-5f;
 
 bool MathUtils::solveQuadratic(const double a, const double b, const double c, double &t1, double &t2)
 {
@@ -65,9 +65,7 @@ bool MathUtils::refract(const QVector4D &incident, const QVector4D &normal,
     if (cosPhiT <= 0.0)
         return true;       // total internal reflection
     cosPhiT = sqrt(cosPhiT);
-//    qDebug() << nInv << incident << cosPhiT << cosPhiI << normal << n;
     refracted = nInv * incident - (cosPhiT - nInv * cosPhiI) * normal;
-//    qDebug() << incident << refracted << n;
 
     return false;
 }

@@ -3,6 +3,7 @@ reijo
 
 Qt based ray tracer that uses QML and javascript to describe scenes.
 
+![Screenshot](https://dl.dropboxusercontent.com/u/15525442/whitted.png)
 
 Video encoding requires ffmpeg and libx264(rgb). I built mine using https://ffmpeg.org/trac/ffmpeg/wiki/UbuntuCompilationGuide
 When configuring libx264 and ffmpeg add --enable-dynamic to the configuration line suggested by the guide and make sure the

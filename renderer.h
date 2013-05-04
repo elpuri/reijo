@@ -31,6 +31,7 @@
 #include "proputils.h"
 
 class Scene;
+class HdrViewer;    // TODO: make a baseclass
 
 class Renderer : public QObject
 {
@@ -38,6 +39,7 @@ class Renderer : public QObject
 
     SIMPLE_PROPERTY(int, renderedWidth)
     SIMPLE_PROPERTY(int, renderedHeight)
+    SIMPLE_PROPERTY(HdrViewer*, viewer)     // for hooking up to pick signals
 
 public:
 

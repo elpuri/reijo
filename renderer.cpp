@@ -25,7 +25,9 @@
 
 #include "renderer.h"
 
-Renderer::Renderer(QObject *parent) : QObject(parent)
+Renderer::Renderer(QObject *parent) :
+    QObject(parent),
+    m_viewer(nullptr)
 {
 
 }

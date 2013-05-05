@@ -275,30 +275,7 @@ void WhittedRenderer::onPicked(const int x, const int y)
     Ray primaryRay;
     m_activeCamera->generateRay(primaryRay, x * xStep, y * yStep, aspect);
     Shape* hitShape = nullptr;
-    double dummyT;
-    if (!m_grid->intersect(primaryRay, hitShape, dummyT))
-        return;
+    double t;
+*/
 
-    qDebug() << hitShape->rotation();
-
-    BoundingBox wsbb = hitShape->worldSpaceBoundingBox();
-    qDebug() << wsbb;
-    int blfx, blfy, blfz, trbx, trby, trbz;
-    m_grid->worldCoordinatesToGridIndices(wsbb.m_blf, blfx, blfy, blfz);
-    m_grid->worldCoordinatesToGridIndices(wsbb.m_trb, trbx, trby, trbz);
-    qDebug() << "blf in grid coords" << blfx << blfy << blfz;
-    qDebug() << "trb in grid coords" << trbx << trby << trbz;
-
-    int dX = trbx - blfx, dY = trby - blfy, dZ = trbz - blfz;
-    QVector4D bbBlf = m_grid->m_gridBB.m_blf +
-            QVector4D(blfx * m_grid->m_cellSize.x(),
-                      blfy * m_grid->m_cellSize.y(),
-                      blfz * m_grid->m_cellSize.z(), 1.0);
-    QVector4D bbTrb = m_grid->m_gridBB.m_blf +
-            QVector4D((trbx + 1) * m_grid->m_cellSize.x(),
-                      (trby + 1) * m_grid->m_cellSize.y(),
-                      (trbz + 1) * m_grid->m_cellSize.z(), 1.0);
-    qDebug() << bbBlf << bbTrb;
-    qDebug() << "----------------------------------------------------------------------";
-    */
 }

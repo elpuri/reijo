@@ -43,9 +43,9 @@ class SceneNode : public QObject
 public:
     explicit SceneNode(QObject *parent = 0);
     QQmlListProperty<QObject> data();
-    void addNode(SceneNode* node);
 
-    SceneNode* parentNode() const { return m_parentNode; }
+    Q_INVOKABLE void addNode(SceneNode* node);
+    Q_INVOKABLE SceneNode* parentNode() const { return m_parentNode; }
     QList<SceneNode*> childNodes() const { return m_childNodes; }
     void dump(int level);
 

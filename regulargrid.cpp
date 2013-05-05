@@ -30,13 +30,12 @@ void RegularGrid::initialize(QList<Shape *> &shapes)
         } else
             m_alwaysIntersect.append(s);
     }
-//    m_gridBB.m_trb += QVector4D(0.5, 0.5, 0.5, 0.0);
-//    m_gridBB.m_blf -= QVector4D(0.5, 0.5, 0.5, 0.0);
+
     m_gridBBSize = (m_gridBB.m_trb - m_gridBB.m_blf).toVector3D();
 
     qDebug() << "World bounding box" << m_gridBB.m_blf.toVector3D() << m_gridBB.m_trb.toVector3D() << ", size:" << m_gridBBSize;
 
-    int m = 2;
+    int m = 3;
     double s = pow(m_gridBBSize.x() * m_gridBBSize.y() * m_gridBBSize.z() / boundableShapes.count(), 1.0 / 3.0);
     m_dimX = ((int) (m * m_gridBBSize.x() / s)) + 1;
     m_dimY = ((int) (m * m_gridBBSize.y() / s)) + 1;
@@ -52,10 +51,10 @@ void RegularGrid::initialize(QList<Shape *> &shapes)
 
     // Add shapes to cells
     foreach(ShapeBoxPair s, boundableShapes) {
+
         int blfx, blfy, blfz, trbx, trby, trbz;
         worldCoordinatesToGridIndices(s.wsbb.m_blf, blfx, blfy, blfz);
         worldCoordinatesToGridIndices(s.wsbb.m_trb, trbx, trby, trbz);
-
         for (int i = blfx; i <= trbx; i++) {
             for (int j = blfy; j <= trby; j++) {
                 for (int k = blfz; k <= trbz; k++) {
@@ -64,6 +63,22 @@ void RegularGrid::initialize(QList<Shape *> &shapes)
             }
         }
     }
+
+    // Calc stats
+    int minShapeCount = 99999999999, maxShapeCount = 0, total = 0;
+    for (int i = 0; i < m_dimX; i++) {
+        for (int j = 0; j < m_dimY; j++) {
+            for (int k = 0; k < m_dimZ; k++) {
+                int c = m_cells[gridIndex(i, j, k)].count();
+                maxShapeCount = maxShapeCount < c ? c : maxShapeCount;
+                minShapeCount = minShapeCount > c ? c : minShapeCount;
+                total += c;
+            }
+        }
+    }
+
+    qDebug() << "Most populated cell has:" << maxShapeCount << ", Least populated cell has" << minShapeCount <<
+                "Average population:" << (float) total / (m_dimX * m_dimY * m_dimZ);
 }
 
 bool RegularGrid::intersectBoundless(const Ray &r, Shape *&s, double &t) const
@@ -83,11 +98,11 @@ bool RegularGrid::intersectBoundless(const Ray &r, Shape *&s, double &t) const
     return hit;
 }
 
+
 bool RegularGrid::intersect(const Ray &r, Shape *&hitShape, double &minT) const
 {
     // http://www.cse.chalmers.se/edu/course/_MY_MISSING_COURSE_2012/_courses_2011/TDA361_Computer_Graphics/grid.pdf
     double rdx = r.direction().x(), rdy = r.direction().y(), rdz = r.direction().z();
-
     QVector4D cellEnter;
     double tt = 0;
     if (m_gridBB.isInside(r.origin())) {
@@ -115,38 +130,37 @@ bool RegularGrid::intersect(const Ray &r, Shape *&hitShape, double &minT) const
     if (rdx > 0.0) {
         stepX = 1;
         tDeltaX = m_cellSize.x() / rdx;
-        tMaxX = tt + ((cellX + 1) * m_cellSize.x() - rayOcellO.x()) / rdx;
+        tMaxX = ((cellX + 1) * m_cellSize.x() - rayOcellO.x()) / rdx;
     } else {
         stepX = -1;
         tDeltaX = m_cellSize.x() / -rdx;
-        tMaxX = tt + (cellX * m_cellSize.x() - rayOcellO.x()) / rdx;    // the nominator and denominator are both negative so they cancel out
+        tMaxX = (cellX * m_cellSize.x() - rayOcellO.x()) / rdx;    // the nominator and denominator are both negative so they cancel out
     }
 
     if (rdy > 0.0) {
         stepY = 1;
         tDeltaY = m_cellSize.y() / rdy;
-        tMaxY = tt + ((cellY + 1) * m_cellSize.y() - rayOcellO.y()) / rdy;
+        tMaxY = ((cellY + 1) * m_cellSize.y() - rayOcellO.y()) / rdy;
     } else {
         stepY = -1;
         tDeltaY = m_cellSize.y() / -rdy;
-        tMaxY = tt + (cellY * m_cellSize.y() - rayOcellO.y()) / rdy;    // the nominator and denominator are both negative so they cancel out
+        tMaxY = (cellY * m_cellSize.y() - rayOcellO.y()) / rdy;    // the nominator and denominator are both negative so they cancel out
     }
 
     if (rdz > 0.0) {
         stepZ = 1;
         tDeltaZ = m_cellSize.z() / rdz;
-        tMaxZ = tt + ((cellZ + 1) * m_cellSize.z() - rayOcellO.z()) / rdz;
+        tMaxZ = ((cellZ + 1) * m_cellSize.z() - rayOcellO.z()) / rdz;
     } else {
         stepZ = -1;
         tDeltaZ = m_cellSize.z() / -rdz;
-        tMaxZ = tt + (cellZ * m_cellSize.z() - rayOcellO.z()) / rdz;    // the nominator and denominator are both negative so they cancel out
+        tMaxZ = (cellZ * m_cellSize.z() - rayOcellO.z()) / rdz;    // the nominator and denominator are both negative so they cancel out
     }
 
     bool bailOut = false;
     while(!bailOut) {
         double t;
         double cellBorderT = MIN3(tMaxX, tMaxY, tMaxZ);
-
         bool hitFound = false;
         QVector<Shape*> cellContent = m_cells[gridIndex(cellX, cellY, cellZ)];
         foreach(Shape* s, cellContent) {

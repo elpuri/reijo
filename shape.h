@@ -45,7 +45,7 @@ class Shape : public SceneNode,
     SIMPLE_NOTIFYING_PROPERTY(QVector3D, position)
     SIMPLE_NOTIFYING_PROPERTY(QVector3D, rotation)
     SIMPLE_NOTIFYING_PROPERTY(QVector3D, scale)
-    SIMPLE_PROPERTY(Material*, material)
+    SIMPLE_NOTIFYING_PROPERTY(Material*, material)
     SIMPLE_NOTIFYING_PROPERTY(bool, castsShadows)
     SIMPLE_NOTIFYING_PROPERTY(bool, visible)
 

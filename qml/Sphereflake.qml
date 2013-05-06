@@ -21,7 +21,6 @@ Sphere {
         leaf.position = Qt.vector3d(d.x * positionMultiplier * parentNode.radius,
                                     d.y * positionMultiplier * parentNode.radius,
                                     d.z * positionMultiplier * parentNode.radius)
-        console.log("joo" + leaf.position + " " + leaf.radius)
         parentNode.addNode(leaf)
 
         if (level + 1 > root.levels)

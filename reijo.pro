@@ -86,7 +86,9 @@ OTHER_FILES += \
     qml/transparencytest.qml \
     qml/glassyanim.qml \
     qml/glasstorusanim.qml \
-    qml/gridtestscene.qml
+    qml/gridtestscene.qml \
+    qml/sphereflakescene.qml \
+    qml/Sphereflake.qml
 
 FORMS += \
     hdrviewersettings.ui

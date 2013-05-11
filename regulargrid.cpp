@@ -30,6 +30,8 @@ void RegularGrid::initialize(QList<Shape *> &shapes)
         } else
             m_alwaysIntersect.append(s);
     }
+    m_gridBB.m_blf -= MathUtils::v4Epsilon;
+    m_gridBB.m_trb += MathUtils::v4Epsilon;
 
     m_gridBBSize = (m_gridBB.m_trb - m_gridBB.m_blf).toVector3D();
 

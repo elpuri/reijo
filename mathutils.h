@@ -42,6 +42,7 @@ public:
                         const float nOutside, const float nInside, QVector4D& refracted, bool fromInside);
     static const double dEpsilon;
     static const float fEpsilon;
+    static const QVector4D v4Epsilon;
     static float randomf();
 
 private:

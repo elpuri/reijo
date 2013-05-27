@@ -82,8 +82,8 @@ QVector4D Sphere::surfaceNormal(const QVector4D &p, const Ray& ray)
     QMatrix4x4 a = m_worldToObject.transposed();
     a.setRow(3, QVector4D(0.0, 0.0, 0.0, 1.0));
     n = a * n;
-
-    return n.normalized();
+    double rinv = 1.0 / m_radius;
+    return n * rinv;
 }
 
 BoundingBox Sphere::worldSpaceBoundingBox() const

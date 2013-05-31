@@ -14,62 +14,62 @@ QMAKE_CXXFLAGS += -std=c++0x -O3
 LIBS += -L /usr/local/lib -lavcodec -lavformat -lswscale
 
 
-SOURCES += main.cpp \
-    objecteditorwidget.cpp \
-    scene.cpp \
-    camera.cpp \
-    shapefactory.cpp \
-    scenenode.cpp \
-    shape.cpp \
-    sphere.cpp \
-    ray.cpp \
-    whittedrenderer.cpp \
-    light.cpp \
-    pointlight.cpp \
-    renderer.cpp \
-    hdrviewer.cpp \
-    mathutils.cpp \
-    material.cpp \
-    plane.cpp \
-    hdrviewersettings.cpp \
-    videoencoder.cpp \
-    torus.cpp \
-    disc.cpp \
-    box.cpp \
-    cylinder.cpp \
-    regulargrid.cpp \
-    boundingbox.cpp \
-    imagewidget.cpp \
-    cone.cpp
+SOURCES += src/main.cpp \
+    src/objecteditorwidget.cpp \
+    src/scene.cpp \
+    src/camera.cpp \
+    src/shapefactory.cpp \
+    src/scenenode.cpp \
+    src/shape.cpp \
+    src/sphere.cpp \
+    src/ray.cpp \
+    src/whittedrenderer.cpp \
+    src/light.cpp \
+    src/pointlight.cpp \
+    src/renderer.cpp \
+    src/hdrviewer.cpp \
+    src/mathutils.cpp \
+    src/material.cpp \
+    src/plane.cpp \
+    src/hdrviewersettings.cpp \
+    src/videoencoder.cpp \
+    src/torus.cpp \
+    src/disc.cpp \
+    src/box.cpp \
+    src/cylinder.cpp \
+    src/regulargrid.cpp \
+    src/boundingbox.cpp \
+    src/imagewidget.cpp \
+    src/cone.cpp
 
 HEADERS += \
-    proputils.h \
-    objecteditorwidget.h \
-    scene.h \
-    camera.h \
-    shapefactory.h \
-    scenenode.h \
-    shape.h \
-    sphere.h \
-    ray.h \
-    whittedrenderer.h \
-    renderer.h \
-    light.h \
-    pointlight.h \
-    hdrviewer.h \
-    mathutils.h \
-    material.h \
-    plane.h \
-    hdrviewersettings.h \
-    videoencoder.h \
-    torus.h \
-    disc.h \
-    box.h \
-    cylinder.h \
-    regulargrid.h \
-    boundingbox.h \
-    imagewidget.h \
-    cone.h
+    src/proputils.h \
+    src/objecteditorwidget.h \
+    src/scene.h \
+    src/camera.h \
+    src/shapefactory.h \
+    src/scenenode.h \
+    src/shape.h \
+    src/sphere.h \
+    src/ray.h \
+    src/whittedrenderer.h \
+    src/renderer.h \
+    src/light.h \
+    src/pointlight.h \
+    src/hdrviewer.h \
+    src/mathutils.h \
+    src/material.h \
+    src/plane.h \
+    src/hdrviewersettings.h \
+    src/videoencoder.h \
+    src/torus.h \
+    src/disc.h \
+    src/box.h \
+    src/cylinder.h \
+    src/regulargrid.h \
+    src/boundingbox.h \
+    src/imagewidget.h \
+    src/cone.h
 
 OTHER_FILES += \
     qml/testscene.qml \

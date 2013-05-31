@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     cylinder.cpp \
     regulargrid.cpp \
     boundingbox.cpp \
-    imagewidget.cpp
+    imagewidget.cpp \
+    cone.cpp
 
 HEADERS += \
     proputils.h \
@@ -67,7 +68,8 @@ HEADERS += \
     cylinder.h \
     regulargrid.h \
     boundingbox.h \
-    imagewidget.h
+    imagewidget.h \
+    cone.h
 
 OTHER_FILES += \
     qml/testscene.qml \
@@ -88,7 +90,9 @@ OTHER_FILES += \
     qml/glasstorusanim.qml \
     qml/gridtestscene.qml \
     qml/sphereflakescene.qml \
-    qml/Sphereflake.qml
+    qml/Sphereflake.qml \
+    qml/conetestscene.qml \
+    qml/glassgridscene.qml
 
 FORMS += \
     hdrviewersettings.ui

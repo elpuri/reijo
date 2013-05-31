@@ -44,6 +44,7 @@
 #include "disc.h"
 #include "box.h"
 #include "cylinder.h"
+#include "cone.h"
 
 int main(int argc, char *argv[])
 {
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Disc>("Reijo", 1, 0, "Disc");
     qmlRegisterType<Box>("Reijo", 1, 0, "Box");
     qmlRegisterType<Cylinder>("Reijo", 1, 0, "Cylinder");
+    qmlRegisterType<Cone>("Reijo", 1, 0, "Cone");
 
     QQmlEngine engine;
     QQmlComponent qmlComponent(&engine, QString(argv[1]));

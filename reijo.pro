@@ -11,7 +11,7 @@ TARGET = reijo
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x -O3
-LIBS += -L /usr/local/lib -lavcodec -lavformat -lswscale
+LIBS += -L /usr/local/lib -lavcodec -lavformat -lswscale -lavutil
 
 
 SOURCES += src/main.cpp \

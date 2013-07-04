@@ -25,7 +25,7 @@ VideoEncoder::VideoEncoder(QObject *parent) :
     AVCodec* codec = av_codec_next(nullptr);
     while (codec) {
 
-        if (codec->id == AV_CODEC_ID_H264)
+        if (codec->id == CODEC_ID_H264)
             qDebug() << codec->name << codec->id;
         codec = av_codec_next(codec);
     }
@@ -59,7 +59,7 @@ void VideoEncoder::onRenderingStarted()
         m_outputFormat = av_guess_format("mpeg", NULL, NULL);
     }
 
-    m_outputFormat->video_codec = AV_CODEC_ID_H264;
+    m_outputFormat->video_codec = CODEC_ID_H264;
     m_formatContext = avformat_alloc_context();
     checkPtr(m_formatContext);
 

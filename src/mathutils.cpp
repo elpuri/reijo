@@ -32,7 +32,7 @@ MathUtils::MathUtils()
 {
 }
 
-const double MathUtils::dEpsilon = 3e-5d;
+const double MathUtils::dEpsilon = 3e-5;
 const float MathUtils::fEpsilon = 3e-5f;
 const QVector4D MathUtils::v4Epsilon = QVector4D(MathUtils::dEpsilon, MathUtils::dEpsilon, MathUtils::dEpsilon, 0.0);
 

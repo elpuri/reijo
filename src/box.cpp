@@ -18,19 +18,19 @@ bool Box::intersect(const Ray &ray, double &t)
 
 
     if (dx >= 0) {
-       tmin = (-1.0d - ox) / dx;
-       tmax =  (1.0d - ox) / dx;
+       tmin = (-1.0 - ox) / dx;
+       tmax =  (1.0 - ox) / dx;
     } else {
-        tmin = ( 1.0d - ox) / dx;
-        tmax = (-1.0d - ox) / dx;
+        tmin = ( 1.0 - ox) / dx;
+        tmax = (-1.0 - ox) / dx;
     }
 
     if (r.direction().y() >= 0) {
-        tymin = (-1.0d - oy) / dy;
-        tymax = ( 1.0d - oy) / dy;
+        tymin = (-1.0 - oy) / dy;
+        tymax = ( 1.0 - oy) / dy;
     } else {
-        tymin = ( 1.0d - oy) / dy;
-        tymax = (-1.0d - oy) / dy;
+        tymin = ( 1.0 - oy) / dy;
+        tymax = (-1.0 - oy) / dy;
     }
 
     if ((tmin > tymax) || (tymin > tmax))
@@ -42,11 +42,11 @@ bool Box::intersect(const Ray &ray, double &t)
         tmax = tymax;
 
     if (dz >= 0) {
-        tzmin = (-1.0d - oz) / dz;
-        tzmax = ( 1.0d - oz) / dz;
+        tzmin = (-1.0 - oz) / dz;
+        tzmax = ( 1.0 - oz) / dz;
     } else {
-        tzmin = ( 1.0d - oz) / dz;
-        tzmax = (-1.0d - oz) / dz;
+        tzmin = ( 1.0 - oz) / dz;
+        tzmax = (-1.0 - oz) / dz;
     }
     if ((tmin > tzmax) || (tzmin > tmax))
         return false;

@@ -4,3 +4,8 @@ callgrind*
 *.png
 *.jpg
 *.mp4
+*.o
+moc_*
+ui_*
+reijo
+Makefile
